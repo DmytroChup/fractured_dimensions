@@ -9,8 +9,8 @@ public class CommonClass {
 
     public static void init() {
         ModBlocks.init();
-        ModBlockEntities.init();
         ModItems.init();
+        ModBlockEntities.init();
         ModCreativeTabs.init();
     }
 }
