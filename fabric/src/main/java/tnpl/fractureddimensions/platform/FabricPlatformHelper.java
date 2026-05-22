@@ -43,7 +43,7 @@ public class FabricPlatformHelper implements IPlatformHelper {
     public CreativeModeTab buildCreativeTab() {
         return FabricCreativeModeTab.builder()
                 .icon(() -> new ItemStack(ModItems.SINGULARITY_LENS.get()))
-                .title(Component.translatable("itemGroup.fractureddimensions.tab"))
+                .title(Component.translatable("itemGroup.fractured_dimensions.tab"))
                 .displayItems((displayParameters, output) -> {
                     List<ItemStack> stacks = ModItems.ITEMS.getEntries().stream().map(reg -> new ItemStack(reg.get())).toList();
                     output.acceptAll(stacks);
