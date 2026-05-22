@@ -1,0 +1,20 @@
+{
+  "itemGroup.fractured_dimensions.tab": "Fractured Dimensions",
+
+  "item.fractured_dimensions.raw_stardust": "Сырая звездная пыль",
+  "item.fractured_dimensions.meteorite_shard": "Осколок метеорита",
+  "item.fractured_dimensions.void_alloy_ingot": "Слиток сплава пустоты",
+  "item.fractured_dimensions.spatial_wrench": "Пространственный ключ",
+  "item.fractured_dimensions.glass_lens": "Стеклянная линза",
+  "item.fractured_dimensions.crystal_lens": "Кристальная линза",
+  "item.fractured_dimensions.warped_lens": "Искаженная линза",
+  "item.fractured_dimensions.singularity_lens": "Линза сингулярности",
+
+  "block.fractured_dimensions.fallen_meteorite": "Упавший метеорит",
+  "block.fractured_dimensions.azurite_ore": "Азуритовая руда",
+  "block.fractured_dimensions.deepslate_azurite_ore": "Глубинная азуритовая руда",
+  "block.fractured_dimensions.spatial_frame": "Пространственный каркас",
+  "block.fractured_dimensions.observer_platform": "Платформа наблюдателя",
+  "block.fractured_dimensions.energy_core": "Энергетическое ядро",
+  "block.fractured_dimensions.anchor_controller": "Контроллер якоря"
+}

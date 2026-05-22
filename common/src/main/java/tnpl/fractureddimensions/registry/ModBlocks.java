@@ -50,6 +50,7 @@ public class ModBlocks {
         RegistryObject<Block, T> block = BLOCKS.register(name, blockSupplier);
 
         ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name)))));
 
         return block;

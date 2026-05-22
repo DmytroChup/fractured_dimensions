@@ -1,0 +1,20 @@
+{
+  "itemGroup.fractured_dimensions.tab": "Fractured Dimensions",
+
+  "item.fractured_dimensions.raw_stardust": "Raw Stardust",
+  "item.fractured_dimensions.meteorite_shard": "Meteorite Shard",
+  "item.fractured_dimensions.void_alloy_ingot": "Void Alloy Ingot",
+  "item.fractured_dimensions.spatial_wrench": "Spatial Wrench",
+  "item.fractured_dimensions.glass_lens": "Glass Lens",
+  "item.fractured_dimensions.crystal_lens": "Crystal Lens",
+  "item.fractured_dimensions.warped_lens": "Warped Lens",
+  "item.fractured_dimensions.singularity_lens": "Singularity Lens",
+
+  "block.fractured_dimensions.fallen_meteorite": "Fallen Meteorite",
+  "block.fractured_dimensions.azurite_ore": "Azurite Ore",
+  "block.fractured_dimensions.deepslate_azurite_ore": "Deepslate Azurite Ore",
+  "block.fractured_dimensions.spatial_frame": "Spatial Frame",
+  "block.fractured_dimensions.observer_platform": "Observer Platform",
+  "block.fractured_dimensions.energy_core": "Energy Core",
+  "block.fractured_dimensions.anchor_controller": "Anchor Controller"
+}
