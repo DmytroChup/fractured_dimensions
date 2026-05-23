@@ -7,7 +7,9 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 import tnpl.fractureddimensions.Constants;
 import tnpl.fractureddimensions.block.AnchorControllerBlock;
 import tnpl.fractureddimensions.block.EnergyCoreBlock;
@@ -21,25 +23,49 @@ public class ModBlocks {
     public static final RegistrationProvider<Block> BLOCKS = RegistrationProvider.get(BuiltInRegistries.BLOCK, Constants.MOD_ID);
 
     public static final RegistryObject<Block, Block> FALLEN_METEORITE = registerBlock("fallen_meteorite",
-            () -> new Block(blockBuilder("fallen_meteorite").destroyTime(5.0f)));
+            () -> new Block(blockBuilder("fallen_meteorite")
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .strength(5.0F, 10.0F)
+                    .requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block, Block> AZURITE_ORE = registerBlock("azurite_ore",
-            () -> new Block(blockBuilder("azurite_ore").destroyTime(3.0f)));
+            () -> new Block(blockBuilder("azurite_ore")
+                    .mapColor(MapColor.STONE)
+                    .strength(4.0F, 4.0F)
+                    .requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block, Block> DEEPSLATE_AZURITE_ORE = registerBlock("deepslate_azurite_ore",
-            () -> new Block(blockBuilder("deepslate_azurite_ore").destroyTime(4.5f)));
+            () -> new Block(blockBuilder("deepslate_azurite_ore")
+                    .mapColor(MapColor.DEEPSLATE)
+                    .strength(5.0F, 4.0F)
+                    .requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block, Block> SPATIAL_FRAME = registerBlock("spatial_frame",
-            () -> new Block(blockBuilder("spatial_frame").destroyTime(2.0f)));
+            () -> new Block(blockBuilder("spatial_frame")
+                    .mapColor(MapColor.METAL)
+                    .sound(SoundType.METAL)
+                    .strength(2.0F, 6.0F)
+                    .requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block, Block> OBSERVER_PLATFORM = registerBlock("observer_platform",
-            () -> new Block(blockBuilder("observer_platform").destroyTime(2.0f)));
+            () -> new Block(blockBuilder("observer_platform")
+                    .mapColor(MapColor.METAL)
+                    .sound(SoundType.METAL)
+                    .strength(2.0F, 6.0F)
+                    .requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block, EnergyCoreBlock> ENERGY_CORE = registerBlock("energy_core",
-            () -> new EnergyCoreBlock(blockBuilder("energy_core").destroyTime(3.0f)));
+            () -> new EnergyCoreBlock(blockBuilder("energy_core")
+                    .mapColor(MapColor.COLOR_CYAN)
+                    .lightLevel(state -> 7)
+                    .strength(3.0F, 6.0F)
+                    .requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block, AnchorControllerBlock> ANCHOR_CONTROLLER = registerBlock("anchor_controller",
-            () -> new AnchorControllerBlock(blockBuilder("anchor_controller").destroyTime(3.0f)));
+            () -> new AnchorControllerBlock(blockBuilder("anchor_controller")
+                    .mapColor(MapColor.COLOR_BLUE)
+                    .strength(3.0F, 6.0F)
+                    .requiresCorrectToolForDrops()));
 
     private static BlockBehaviour.Properties blockBuilder(String name) {
         return BlockBehaviour.Properties.of()
