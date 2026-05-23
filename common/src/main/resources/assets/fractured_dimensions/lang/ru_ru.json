@@ -9,6 +9,8 @@
   "item.fractured_dimensions.crystal_lens": "Кристальная линза",
   "item.fractured_dimensions.warped_lens": "Искаженная линза",
   "item.fractured_dimensions.singularity_lens": "Линза сингулярности",
+  "item.fractured_dimensions.raw_azurite": "Необработанный азурит",
+  "item.fractured_dimensions.azurite_ingot": "Слиток азурита",
 
   "block.fractured_dimensions.fallen_meteorite": "Упавший метеорит",
   "block.fractured_dimensions.azurite_ore": "Азуритовая руда",
