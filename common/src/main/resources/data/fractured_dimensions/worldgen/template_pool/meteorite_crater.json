@@ -1,0 +1,16 @@
+{
+  "name": "fractured_dimensions:meteorite_crater",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "fractured_dimensions:meteorite_crater",
+        "processors": "fractured_dimensions:meteorite_crater",
+        "projection": "rigid",
+        "liquid_settings": "apply_waterlogging"
+      }
+    }
+  ]
+}
