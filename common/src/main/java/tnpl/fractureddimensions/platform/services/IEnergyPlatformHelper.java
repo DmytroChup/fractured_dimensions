@@ -1,41 +1,42 @@
 package tnpl.fractureddimensions.platform.services;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public interface IEnergyPlatformHelper {
 
     /**
-     * Checks if the specified BlockEntity supports energy capability on the given side.
+     * Checks if the block at the specified position can accept or extract energy.
      */
-    boolean hasEnergySupport(BlockEntity blockEntity, @Nullable Direction side);
+    boolean isEnergyContainer(Level level, BlockPos pos, @Nullable Direction side);
 
     /**
-     * Retrieves the current amount of energy stored within the BlockEntity.
+     * Returns the current amount of energy stored in the block.
      */
-    int getEnergyStored(BlockEntity blockEntity, @Nullable Direction side);
+    long getEnergyStored(Level level, BlockPos pos, @Nullable Direction side);
 
     /**
-     * Retrieves the maximum energy capacity of the BlockEntity.
+     * Returns the maximum energy capacity of the block.
      */
-    int getMaxEnergyCapacity(BlockEntity blockEntity, @Nullable Direction side);
+    long getMaxEnergyStored(Level level, BlockPos pos, @Nullable Direction side);
 
     /**
-     * Inserts energy into the BlockEntity.
+     * Attempts to insert energy into the block.
      *
      * @param amount   The amount of energy to insert.
-     * @param simulate If true, the insertion is only simulated (no state change).
-     * @return The actual amount of energy that was (or would be) accepted.
+     * @param simulate If true, simulates the insertion (returns the result but does not modify the block's energy).
+     * @return The amount of energy that was (or would be) successfully inserted.
      */
-    int insertEnergy(BlockEntity blockEntity, @Nullable Direction side, int amount, boolean simulate);
+    long insertEnergy(Level level, BlockPos pos, @Nullable Direction side, long amount, boolean simulate);
 
     /**
-     * Extracts energy from the BlockEntity.
+     * Attempts to extract energy from the block.
      *
      * @param amount   The maximum amount of energy to extract.
-     * @param simulate If true, the extraction is only simulated (no state change).
-     * @return The actual amount of energy that was (or would be) extracted.
+     * @param simulate If true, simulates the extraction (returns the result but does not modify the block's energy).
+     * @return The amount of energy that was (or would be) successfully extracted.
      */
-    int extractEnergy(BlockEntity blockEntity, @Nullable Direction side, int amount, boolean simulate);
+    long extractEnergy(Level level, BlockPos pos, @Nullable Direction side, long amount, boolean simulate);
 }
