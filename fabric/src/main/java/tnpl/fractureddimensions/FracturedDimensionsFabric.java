@@ -7,6 +7,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import team.reborn.energy.api.EnergyStorage;
+import tnpl.fractureddimensions.energy.FabricCoreEnergyWrapper;
+import tnpl.fractureddimensions.registry.ModBlockEntities;
 
 public class FracturedDimensionsFabric implements ModInitializer {
 
@@ -19,8 +22,13 @@ public class FracturedDimensionsFabric implements ModInitializer {
                 GenerationStep.Decoration.UNDERGROUND_ORES,
                 ResourceKey.create(
                         Registries.PLACED_FEATURE,
-                        Identifier.fromNamespaceAndPath("fractured_dimensions", "azurite_ore")
+                        Identifier.fromNamespaceAndPath(Constants.MOD_ID, "azurite_ore")
                 )
+        );
+
+        EnergyStorage.SIDED.registerForBlockEntity(
+                (blockEntity, direction) -> new FabricCoreEnergyWrapper(blockEntity),
+                ModBlockEntities.ENERGY_CORE.get()
         );
     }
 }
