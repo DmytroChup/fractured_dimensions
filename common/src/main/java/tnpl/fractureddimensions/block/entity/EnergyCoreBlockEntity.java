@@ -17,32 +17,32 @@ public class EnergyCoreBlockEntity extends BlockEntity {
     @Unique
     private static final String NBT_MAX_ENERGY = "MaxEnergy";
 
-    private static final int DEFAULT_MAX_ENERGY = 10_000;
+    private static final long DEFAULT_MAX_ENERGY = 10_000L;
 
-    private int energy;
-    private int maxEnergy;
+    private long energy;
+    private long maxEnergy;
 
     public EnergyCoreBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ENERGY_CORE.get(), pos, state);
-        this.energy = 0;
+        this.energy = 0L;
         this.maxEnergy = DEFAULT_MAX_ENERGY;
     }
 
     // ---- Getters ----
 
-    public int getEnergy() {
+    public long getEnergy() {
         return energy;
     }
 
-    public int getMaxEnergy() {
+    public long getMaxEnergy() {
         return maxEnergy;
     }
 
     /**
      * Sets the current energy level, clamping to [0, maxEnergy].
      */
-    public void setEnergy(int energy) {
-        this.energy = Math.clamp(energy, 0, this.maxEnergy);
+    public void setEnergy(long energy) {
+        this.energy = Math.clamp(energy, 0L, this.maxEnergy);
         setChanged();
     }
 
@@ -50,8 +50,8 @@ public class EnergyCoreBlockEntity extends BlockEntity {
      * Sets the maximum energy capacity. Must be at least 0.
      * If current energy exceeds the new max, it is clamped.
      */
-    public void setMaxEnergy(int maxEnergy) {
-        this.maxEnergy = Math.max(0, maxEnergy);
+    public void setMaxEnergy(long maxEnergy) {
+        this.maxEnergy = Math.max(0L, maxEnergy);
         this.energy = Math.min(this.energy, this.maxEnergy);
         setChanged();
     }
@@ -59,40 +59,40 @@ public class EnergyCoreBlockEntity extends BlockEntity {
     /**
      * Adds energy, returns the amount actually added (respects max limit).
      */
-    public int addEnergy(int amount) {
-        if (amount <= 0) return 0;
+    public long addEnergy(long amount) {
+        if (amount <= 0L) return 0L;
 
-        int space = this.maxEnergy - this.energy;
-        int added = Math.min(amount, space);
+        long space = this.maxEnergy - this.energy;
+        long added = Math.min(amount, space);
         this.energy += added;
-        setChanged();
+
         return added;
     }
 
     /**
      * Removes energy, returns the amount actually removed (will not go below 0).
      */
-    public int removeEnergy(int amount) {
-        if (amount <= 0) return 0;
+    public long removeEnergy(long amount) {
+        if (amount <= 0L) return 0L;
 
-        int removed = Math.min(amount, this.energy);
+        long removed = Math.min(amount, this.energy);
         this.energy -= removed;
-        setChanged();
+
         return removed;
     }
 
     @Override
     protected void saveAdditional(@NonNull ValueOutput output) {
         super.saveAdditional(output);
-        output.putInt(NBT_ENERGY, this.energy);
-        output.putInt(NBT_MAX_ENERGY, this.maxEnergy);
+        output.putLong(NBT_ENERGY, this.energy);
+        output.putLong(NBT_MAX_ENERGY, this.maxEnergy);
     }
 
     @Override
     protected void loadAdditional(@NonNull ValueInput input) {
         super.loadAdditional(input);
 
-        this.maxEnergy = input.getIntOr(NBT_MAX_ENERGY, DEFAULT_MAX_ENERGY);
-        this.energy = Math.clamp(input.getIntOr(NBT_ENERGY, 0), 0, this.maxEnergy);
+        this.maxEnergy = input.getLongOr(NBT_MAX_ENERGY, DEFAULT_MAX_ENERGY);
+        this.energy = Math.clamp(input.getLongOr(NBT_ENERGY, 0L), 0L, this.maxEnergy);
     }
 }
