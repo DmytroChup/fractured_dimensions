@@ -30,6 +30,23 @@ public class AnchorControllerBlockEntity extends BlockEntity {
         }
     }
 
+    public MultiblockValidator.ValidationResult validateStructure() {
+        if (this.level == null) {
+            return MultiblockValidator.ValidationResult.fail(this.worldPosition, "Level is null");
+        }
+
+        MultiblockValidator.ValidationResult result = MultiblockValidator.checkStructure(this.level, this.worldPosition);
+
+        if (result.isValid() && this.currentState == MultiblockState.INCOMPLETE) {
+            setCurrentState(MultiblockState.IDLE);
+        } else if (!result.isValid() && this.currentState != MultiblockState.INCOMPLETE) {
+            setCurrentState(MultiblockState.INCOMPLETE);
+        }
+
+        // Возвращаем результат ключу
+        return result;
+    }
+
     @Override
     protected void saveAdditional(@NonNull ValueOutput output) {
         super.saveAdditional(output);
