@@ -43,7 +43,6 @@ public class AnchorControllerBlockEntity extends BlockEntity {
             setCurrentState(MultiblockState.INCOMPLETE);
         }
 
-        // Возвращаем результат ключу
         return result;
     }
 

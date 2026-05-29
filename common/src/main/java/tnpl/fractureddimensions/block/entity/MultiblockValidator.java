@@ -33,54 +33,78 @@ public final class MultiblockValidator {
     private static List<StructureOffset> buildOffsets() {
         List<StructureOffset> list = new java.util.ArrayList<>();
 
-        // Y=0: Observatory foundation (7x7 ring of OBSERVER_PLATFORM)
+        // Y = 0: 7x7 foundation (OBSERVER_PLATFORM) without corner blocks
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
-                if (x == 0 && z == 0) continue; // Skip the controller itself
+                if ((x == 0 && z == 0) || (Math.abs(x) == 3 && Math.abs(z) == 3)) {
+                    continue;
+                }
+
                 list.add(new StructureOffset(x, 0, z, ModBlocks.OBSERVER_PLATFORM, String.format("Y=0 Base [x=%d, z=%d]", x, z)));
             }
         }
 
-        // Y=1: Outer 7x7 wall (SPATIAL_FRAME)
+        // Y = 1: Internal energy storage (5x ENERGY_CORE)
+        list.add(new StructureOffset( 2, 1, -1, ModBlocks.ENERGY_CORE, "Y=1 Energy Core NE"));
+        list.add(new StructureOffset(-2, 1, -1, ModBlocks.ENERGY_CORE, "Y=1 Energy Core NW"));
+        list.add(new StructureOffset( 2, 1,  1, ModBlocks.ENERGY_CORE, "Y=1 Energy Core SE"));
+        list.add(new StructureOffset(-2, 1,  1, ModBlocks.ENERGY_CORE, "Y=1 Energy Core SW"));
+        list.add(new StructureOffset( 0, 1, -2, ModBlocks.ENERGY_CORE, "Y=1 Energy Core Back Center"));
+
+        // Y = 1: Outer U-shaped ring (SPATIAL_FRAME)
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
+                if ((Math.abs(x) == 3 && Math.abs(z) == 3) || (z == 3 && Math.abs(x) <= 1)) {
+                    continue;
+                }
+
                 if (Math.abs(x) == 3 || Math.abs(z) == 3) {
-                    list.add(new StructureOffset(x, 1, z, ModBlocks.SPATIAL_FRAME, String.format("Y=1 Wall [x=%d, z=%d]", x, z)));
+                    list.add(new StructureOffset(x, 1, z, ModBlocks.SPATIAL_FRAME, String.format("Y=1 Pillar [x=%d, z=%d]", x, z)));
                 }
             }
         }
 
-        // Y=1: 4 Inner ENERGY_COREs (Power sources / Cannon base)
-        list.add(new StructureOffset( 2, 1,  2, ModBlocks.ENERGY_CORE, "Y=1 Energy Core SE"));
-        list.add(new StructureOffset( 2, 1, -2, ModBlocks.ENERGY_CORE, "Y=1 Energy Core NE"));
-        list.add(new StructureOffset(-2, 1, -2, ModBlocks.ENERGY_CORE, "Y=1 Energy Core NW"));
-        list.add(new StructureOffset(-2, 1,  2, ModBlocks.ENERGY_CORE, "Y=1 Energy Core SW"));
-
-        // Y=2: Outer 7x7 wall alternating between SPATIAL_FRAME and GLASS
+        // Y = 2: Outer U-shaped ring (SPATIAL_FRAME + GLASS)
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
+                if ((Math.abs(x) == 3 && Math.abs(z) == 3) || (z == 3 && Math.abs(x) <= 1)) {
+                    continue;
+                }
+
                 if (Math.abs(x) == 3 || Math.abs(z) == 3) {
-                    boolean isFrame = (Math.abs(x) + Math.abs(z)) % 2 == 0;
-                    Supplier<? extends Block> block = isFrame ? ModBlocks.SPATIAL_FRAME : () -> Blocks.GLASS;
-                    String type = isFrame ? "Frame" : "Glass";
+                    boolean isGlass = (z == -3 && Math.abs(x) <= 1) || (Math.abs(x) == 3 && z == 0);
+
+                    Supplier<? extends Block> block = isGlass ? () -> Blocks.GLASS : ModBlocks.SPATIAL_FRAME;
+                    String type = isGlass ? "Glass" : "Frame";
+
                     list.add(new StructureOffset(x, 2, z, block, String.format("Y=2 Wall %s [x=%d, z=%d]", type, x, z)));
                 }
             }
         }
 
-        // Y=3: Outer 7x7 wall (SPATIAL_FRAME)
-        for (int x = -3; x <= 3; x++) {
-            for (int z = -3; z <= 3; z++) {
-                if (Math.abs(x) == 3 || Math.abs(z) == 3) {
-                    list.add(new StructureOffset(x, 3, z, ModBlocks.SPATIAL_FRAME, String.format("Y=3 Wall [x=%d, z=%d]", x, z)));
-                }
-            }
+        // Y = 3: Tapered dome ring (SPATIAL_FRAME)
+        for (int x = -1; x <= 1; x++) {
+            list.add(new StructureOffset(x, 3, -3, ModBlocks.SPATIAL_FRAME, String.format("Y=3 Back Wall [x=%d, z=-3]", x)));
         }
 
-        // Y=3: Inner 5x5 Glass Roof
+        for (int z = -1; z <= 1; z++) {
+            list.add(new StructureOffset(-3, 3, z, ModBlocks.SPATIAL_FRAME, String.format("Y=3 Left Wall [x=-3, z=%d]", z)));
+            list.add(new StructureOffset( 3, 3, z, ModBlocks.SPATIAL_FRAME, String.format("Y=3 Right Wall [x=3, z=%d]", z)));
+        }
+
+        list.add(new StructureOffset(-2, 3, -2, ModBlocks.SPATIAL_FRAME, "Y=3 Inner Corner NW"));
+        list.add(new StructureOffset( 2, 3, -2, ModBlocks.SPATIAL_FRAME, "Y=3 Inner Corner NE"));
+        list.add(new StructureOffset(-2, 3,  2, ModBlocks.SPATIAL_FRAME, "Y=3 Inner Corner SW"));
+        list.add(new StructureOffset( 2, 3,  2, ModBlocks.SPATIAL_FRAME, "Y=3 Inner Corner SE"));
+
+        // Y = 4: The dome's outer ring (SPATIAL_FRAME)
         for (int x = -2; x <= 2; x++) {
             for (int z = -2; z <= 2; z++) {
-                list.add(new StructureOffset(x, 3, z, () -> Blocks.GLASS, String.format("Y=3 Glass Roof [x=%d, z=%d]", x, z)));
+                if ((Math.abs(x) == 2 && Math.abs(z) == 2) || (Math.abs(x) <= 1 && Math.abs(z) <= 1)) {
+                    continue;
+                }
+
+                list.add(new StructureOffset(x, 4, z, ModBlocks.SPATIAL_FRAME, String.format("Y=4 Top Ring [x=%d, z=%d]", x, z)));
             }
         }
 
