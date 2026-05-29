@@ -1,6 +1,7 @@
 package tnpl.fractureddimensions.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -12,7 +13,11 @@ public class AnchorControllerBlockEntity extends BlockEntity {
 
     private static final String NBT_STATE = "MultiblockState";
 
+    /** How often the controller re-validates the structure. 40 ticks = 2 seconds */
+    private static final int CHECK_INTERVAL = 40;
+
     private MultiblockState currentState;
+    private int tickCounter;
 
     public AnchorControllerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ANCHOR_CONTROLLER.get(), pos, state);
@@ -44,6 +49,24 @@ public class AnchorControllerBlockEntity extends BlockEntity {
         }
 
         return result;
+    }
+
+    /**
+     * Periodically re-validates the multiblock structure so that
+     * the controller reacts to blocks being broken by the player.
+     */
+    public static void serverTick(Level level, BlockPos pos, BlockState state, AnchorControllerBlockEntity be) {
+        be.tickCounter++;
+
+        if (be.tickCounter < CHECK_INTERVAL) {
+            return;
+        }
+        be.tickCounter = 0;
+
+        // Only re-validate when the structure is supposed to be intact
+        if (be.currentState == MultiblockState.IDLE || be.currentState == MultiblockState.ACTIVE) {
+            be.validateStructure();
+        }
     }
 
     @Override
