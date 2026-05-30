@@ -1,7 +1,16 @@
 {
   "variants": {
-    "": {
-      "model": "fractured_dimensions:block/anchor_controller"
+    "multiblock_state=incomplete": {
+      "model": "fractured_dimensions:block/anchor_controller_incomplete"
+    },
+    "multiblock_state=idle": {
+      "model": "fractured_dimensions:block/anchor_controller_idle"
+    },
+    "multiblock_state=ready": {
+      "model": "fractured_dimensions:block/anchor_controller_ready"
+    },
+    "multiblock_state=active": {
+      "model": "fractured_dimensions:block/anchor_controller_active"
     }
   }
 }
