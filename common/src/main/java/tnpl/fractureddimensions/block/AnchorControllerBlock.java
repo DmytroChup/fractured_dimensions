@@ -8,14 +8,28 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import tnpl.fractureddimensions.block.entity.AnchorControllerBlockEntity;
+import tnpl.fractureddimensions.block.entity.MultiblockState;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
 
 public class AnchorControllerBlock extends Block implements EntityBlock {
+
+    public static final EnumProperty<MultiblockState> MULTIBLOCK_STATE =
+            EnumProperty.create("multiblock_state", MultiblockState.class);
+
     public AnchorControllerBlock(Properties properties) {
         super(properties);
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(MULTIBLOCK_STATE, MultiblockState.INCOMPLETE));
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.@NonNull Builder<Block, BlockState> builder) {
+        builder.add(MULTIBLOCK_STATE);
     }
 
     @Override
@@ -35,4 +49,3 @@ public class AnchorControllerBlock extends Block implements EntityBlock {
                 : null;
     }
 }
-
