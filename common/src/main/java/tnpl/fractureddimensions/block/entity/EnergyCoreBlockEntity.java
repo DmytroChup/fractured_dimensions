@@ -17,7 +17,7 @@ public class EnergyCoreBlockEntity extends BlockEntity {
     @Unique
     private static final String NBT_MAX_ENERGY = "MaxEnergy";
 
-    private static final long DEFAULT_MAX_ENERGY = 10_000L;
+    private static final long DEFAULT_MAX_ENERGY = 10_000_000L;
 
     private long energy;
     private long maxEnergy;
