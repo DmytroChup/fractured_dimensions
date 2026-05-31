@@ -18,5 +18,6 @@
   "block.fractured_dimensions.spatial_frame": "Пространственный каркас",
   "block.fractured_dimensions.observer_platform": "Платформа наблюдателя",
   "block.fractured_dimensions.energy_core": "Энергетическое ядро",
-  "block.fractured_dimensions.anchor_controller": "Контроллер якоря"
+  "block.fractured_dimensions.anchor_controller": "Контроллер якоря",
+  "block.fractured_dimensions.energy_port": "Энергетический порт"
 }

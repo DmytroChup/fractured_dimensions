@@ -18,5 +18,6 @@
   "block.fractured_dimensions.spatial_frame": "Spatial Frame",
   "block.fractured_dimensions.observer_platform": "Observer Platform",
   "block.fractured_dimensions.energy_core": "Energy Core",
-  "block.fractured_dimensions.anchor_controller": "Anchor Controller"
+  "block.fractured_dimensions.anchor_controller": "Anchor Controller",
+  "block.fractured_dimensions.energy_port": "Energy Port"
 }

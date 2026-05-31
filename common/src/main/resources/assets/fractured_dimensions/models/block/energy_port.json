@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "fractured_dimensions:block/energy_port_side",
+    "north": "fractured_dimensions:block/energy_port_front",
+    "south": "fractured_dimensions:block/energy_port_side",
+    "east": "fractured_dimensions:block/energy_port_side",
+    "west": "fractured_dimensions:block/energy_port_side",
+    "up": "fractured_dimensions:block/energy_port_side",
+    "down": "fractured_dimensions:block/energy_port_side"
+  }
+}

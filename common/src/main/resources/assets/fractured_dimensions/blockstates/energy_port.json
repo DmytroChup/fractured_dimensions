@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=north": { "model": "fractured_dimensions:block/energy_port" },
+    "facing=east":  { "model": "fractured_dimensions:block/energy_port", "y": 90 },
+    "facing=south": { "model": "fractured_dimensions:block/energy_port", "y": 180 },
+    "facing=west":  { "model": "fractured_dimensions:block/energy_port", "y": 270 },
+    "facing=up":    { "model": "fractured_dimensions:block/energy_port", "x": -90 },
+    "facing=down":  { "model": "fractured_dimensions:block/energy_port", "x": 90 }
+  }
+}
