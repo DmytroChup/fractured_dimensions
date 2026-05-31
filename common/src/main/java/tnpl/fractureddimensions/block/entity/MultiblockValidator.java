@@ -59,7 +59,11 @@ public final class MultiblockValidator {
                 }
 
                 if (Math.abs(x) == 3 || Math.abs(z) == 3) {
-                    list.add(new StructureOffset(x, 1, z, ModBlocks.SPATIAL_FRAME, String.format("Y=1 Pillar [x=%d, z=%d]", x, z)));
+                    if (x == 0 && z == -3) {
+                        list.add(new StructureOffset(0, 1, -3, ModBlocks.ENERGY_PORT, "Y=1 Energy Port"));
+                    } else {
+                        list.add(new StructureOffset(x, 1, z, ModBlocks.SPATIAL_FRAME, String.format("Y=1 Pillar [x=%d, z=%d]", x, z)));
+                    }
                 }
             }
         }

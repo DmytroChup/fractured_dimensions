@@ -13,6 +13,7 @@ import net.minecraft.world.level.material.MapColor;
 import tnpl.fractureddimensions.Constants;
 import tnpl.fractureddimensions.block.AnchorControllerBlock;
 import tnpl.fractureddimensions.block.EnergyCoreBlock;
+import tnpl.fractureddimensions.block.EnergyPortBlock;
 import tnpl.fractureddimensions.registration.RegistrationProvider;
 import tnpl.fractureddimensions.registration.RegistryObject;
 
@@ -58,6 +59,12 @@ public class ModBlocks {
             () -> new EnergyCoreBlock(blockBuilder("energy_core")
                     .mapColor(MapColor.COLOR_CYAN)
                     .lightLevel(state -> 7)
+                    .strength(3.0F, 6.0F)
+                    .requiresCorrectToolForDrops()));
+
+    public static final RegistryObject<Block, EnergyPortBlock> ENERGY_PORT = registerBlock("energy_port",
+            () -> new EnergyPortBlock(blockBuilder("energy_port")
+                    .mapColor(MapColor.COLOR_CYAN)
                     .strength(3.0F, 6.0F)
                     .requiresCorrectToolForDrops()));
 
