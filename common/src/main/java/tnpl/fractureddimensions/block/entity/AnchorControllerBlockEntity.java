@@ -90,8 +90,38 @@ public class AnchorControllerBlockEntity extends BlockEntity {
         be.tickCounter = 0;
 
         // Only re-validate when the structure is supposed to be intact
-        if (be.currentState == MultiblockState.IDLE || be.currentState == MultiblockState.ACTIVE) {
+        if (be.currentState == MultiblockState.IDLE || be.currentState == MultiblockState.ACTIVE || be.currentState == MultiblockState.READY) {
             be.validateStructure();
+            
+            // Validate energy only when the structure is correctly assembled
+            if (be.currentState == MultiblockState.IDLE || be.currentState == MultiblockState.READY) {
+                be.checkEnergyLevels();
+            }
+        }
+    }
+
+    public void checkEnergyLevels() {
+        if (this.level == null) return;
+
+        BlockPos[] corePositions = new BlockPos[]{
+            this.worldPosition.offset(2, 1, -1),
+            this.worldPosition.offset(-2, 1, -1),
+            this.worldPosition.offset(2, 1, 1),
+            this.worldPosition.offset(-2, 1, 1),
+            this.worldPosition.offset(0, 1, -2)
+        };
+
+        long totalEnergy = 0;
+        for (BlockPos corePos : corePositions) {
+            if (this.level.getBlockEntity(corePos) instanceof EnergyCoreBlockEntity core) {
+                totalEnergy += core.getEnergy();
+            }
+        }
+
+        if (totalEnergy >= 50_000_000L && this.currentState == MultiblockState.IDLE) {
+            setCurrentState(MultiblockState.READY);
+        } else if (totalEnergy < 50_000_000L && this.currentState == MultiblockState.READY) {
+            setCurrentState(MultiblockState.IDLE);
         }
     }
 
