@@ -26,6 +26,7 @@ public class EnergyCoreBlock extends Block implements EntityBlock {
         return new EnergyCoreBlockEntity(blockPos, blockState);
     }
 
+    // TODO: Only for debug, delete later
     @Override
     protected InteractionResult useWithoutItem(BlockState state,
                                                Level level,

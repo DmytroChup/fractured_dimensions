@@ -39,6 +39,7 @@ public class EnergyPortBlock extends Block implements EntityBlock {
         return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
     }
 
+    // TODO: Only for debug, delete later
     @Override
     protected InteractionResult useWithoutItem(BlockState state,
                                                Level level,
