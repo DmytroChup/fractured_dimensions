@@ -8,7 +8,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import team.reborn.energy.api.EnergyStorage;
+import tnpl.fractureddimensions.block.EnergyPortBlock;
 import tnpl.fractureddimensions.energy.FabricCoreEnergyWrapper;
+import tnpl.fractureddimensions.energy.FabricPortEnergyWrapper;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
 
 public class FracturedDimensionsFabric implements ModInitializer {
@@ -29,6 +31,16 @@ public class FracturedDimensionsFabric implements ModInitializer {
         EnergyStorage.SIDED.registerForBlockEntity(
                 (blockEntity, direction) -> new FabricCoreEnergyWrapper(blockEntity),
                 ModBlockEntities.ENERGY_CORE.get()
+        );
+
+        EnergyStorage.SIDED.registerForBlockEntity(
+                (blockEntity, direction) -> {
+                    if (direction == blockEntity.getBlockState().getValue(EnergyPortBlock.FACING)) {
+                        return new FabricPortEnergyWrapper(blockEntity);
+                    }
+                    return null;
+                },
+                ModBlockEntities.ENERGY_PORT.get()
         );
     }
 }
