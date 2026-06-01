@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "fractured_dimensions:block/anchor_controller_incomplete_3d"
+  }
+}

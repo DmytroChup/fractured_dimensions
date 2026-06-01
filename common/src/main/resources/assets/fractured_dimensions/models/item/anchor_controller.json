@@ -1,3 +1,6 @@
 {
-  "parent": "fractured_dimensions:block/anchor_controller_incomplete"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fractured_dimensions:item/anchor_controller"
+  }
 }

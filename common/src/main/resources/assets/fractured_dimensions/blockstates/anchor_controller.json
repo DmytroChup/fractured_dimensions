@@ -1,16 +1,16 @@
 {
   "variants": {
     "multiblock_state=incomplete": {
-      "model": "fractured_dimensions:block/anchor_controller_incomplete"
+      "model": "fractured_dimensions:block/anchor_controller_incomplete_3d"
     },
     "multiblock_state=idle": {
-      "model": "fractured_dimensions:block/anchor_controller_idle"
+      "model": "fractured_dimensions:block/anchor_controller_idle_ready_3d"
     },
     "multiblock_state=ready": {
-      "model": "fractured_dimensions:block/anchor_controller_ready"
+      "model": "fractured_dimensions:block/anchor_controller_idle_ready_3d"
     },
     "multiblock_state=active": {
-      "model": "fractured_dimensions:block/anchor_controller_active"
+      "model": "fractured_dimensions:block/anchor_controller_idle_ready_3d"
     }
   }
 }

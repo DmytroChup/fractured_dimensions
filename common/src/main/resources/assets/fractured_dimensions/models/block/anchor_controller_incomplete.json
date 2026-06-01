@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "fractured_dimensions:block/anchor_controller_incomplete"
-  }
-}
