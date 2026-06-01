@@ -17,6 +17,9 @@
     "entrypoints": {
         "main": [
             "tnpl.fractureddimensions.FracturedDimensionsFabric"
+        ],
+        "client": [
+            "tnpl.fractureddimensions.FracturedDimensionsClientFabric"
         ]
     },
     "mixins": [
