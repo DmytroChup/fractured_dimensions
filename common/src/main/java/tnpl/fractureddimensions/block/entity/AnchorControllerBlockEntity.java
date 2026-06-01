@@ -1,5 +1,13 @@
 package tnpl.fractureddimensions.block.entity;
 
+import com.geckolib.animatable.GeoBlockEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.util.GeckoLibUtil;
+import com.geckolib.animation.state.AnimationTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -10,7 +18,13 @@ import org.jspecify.annotations.NonNull;
 import tnpl.fractureddimensions.block.AnchorControllerBlock;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
 
-public class AnchorControllerBlockEntity extends BlockEntity {
+public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlockEntity {
+
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+
+    private static final RawAnimation DEPLOY_ANIM = RawAnimation.begin()
+            .thenPlay("deploy")
+            .thenLoop("idle_ready");
 
     private static final String NBT_STATE = "MultiblockState";
 
@@ -35,6 +49,27 @@ public class AnchorControllerBlockEntity extends BlockEntity {
             setChanged();
             syncBlockState();
         }
+    }
+
+    @Override
+    public @NonNull AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.cache;
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>("controller", 0, this::predicate));
+    }
+
+    private PlayState predicate(AnimationTest<AnchorControllerBlockEntity> event) {
+        if (this.getBlockState().hasProperty(AnchorControllerBlock.MULTIBLOCK_STATE)) {
+            MultiblockState mState = this.getBlockState().getValue(AnchorControllerBlock.MULTIBLOCK_STATE);
+            
+            if (mState == MultiblockState.READY) {
+                return event.setAndContinue(DEPLOY_ANIM);
+            }
+        }
+        return PlayState.STOP;
     }
 
     /**
