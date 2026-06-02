@@ -19,5 +19,9 @@
   "block.fractured_dimensions.observer_platform": "Observer Platform",
   "block.fractured_dimensions.energy_core": "Energy Core",
   "block.fractured_dimensions.anchor_controller": "Anchor Controller",
-  "block.fractured_dimensions.energy_port": "Energy Port"
+  "block.fractured_dimensions.energy_port": "Energy Port",
+
+  "item.fractured_dimensions.shard_receptacle": "Shard Receptacle",
+  "tooltip.fractured_dimensions.shard_receptacle.empty": "Empty",
+  "tooltip.fractured_dimensions.shard_receptacle.contains_data": "Contains Dimension Data"
 }

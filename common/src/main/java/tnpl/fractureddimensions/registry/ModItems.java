@@ -1,6 +1,7 @@
 package tnpl.fractureddimensions.registry;
 
 import net.minecraft.core.registries.BuiltInRegistries;
+import tnpl.fractureddimensions.item.ShardReceptacleItem;
 import tnpl.fractureddimensions.registration.RegistrationProvider;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -9,6 +10,11 @@ import net.minecraft.world.item.Item;
 import tnpl.fractureddimensions.Constants;
 import tnpl.fractureddimensions.item.SpatialWrenchItem;
 import tnpl.fractureddimensions.registration.RegistryObject;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
+import java.util.List;
 
 public class ModItems {
 
@@ -25,6 +31,13 @@ public class ModItems {
     public static final RegistryObject<Item, Item> CRYSTAL_LENS = ITEMS.register("crystal_lens", () -> new Item(itemBuilder("crystal_lens").stacksTo(1)));
     public static final RegistryObject<Item, Item> WARPED_LENS = ITEMS.register("warped_lens", () -> new Item(itemBuilder("warped_lens").stacksTo(1)));
     public static final RegistryObject<Item, Item> SINGULARITY_LENS = ITEMS.register("singularity_lens", () -> new Item(itemBuilder("singularity_lens").stacksTo(1)));
+
+    public static final RegistryObject<Item, ShardReceptacleItem> SHARD_RECEPTACLE = ITEMS.register("shard_receptacle", () -> new ShardReceptacleItem(itemBuilder("shard_receptacle")
+            .stacksTo(1)
+            .component(DataComponents.LORE,
+                    new ItemLore(List.of(Component.translatable("tooltip.fractured_dimensions.shard_receptacle.empty")
+                            .withStyle(ChatFormatting.GRAY))))
+    ));
 
     private static Item.Properties itemBuilder(String name) {
         return new Item.Properties().setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name)));

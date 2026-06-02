@@ -19,5 +19,9 @@
   "block.fractured_dimensions.observer_platform": "Платформа наблюдателя",
   "block.fractured_dimensions.energy_core": "Энергетическое ядро",
   "block.fractured_dimensions.anchor_controller": "Контроллер якоря",
-  "block.fractured_dimensions.energy_port": "Энергетический порт"
+  "block.fractured_dimensions.energy_port": "Энергетический порт",
+
+  "item.fractured_dimensions.shard_receptacle": "Хранилище осколков",
+  "tooltip.fractured_dimensions.shard_receptacle.empty": "Пусто",
+  "tooltip.fractured_dimensions.shard_receptacle.contains_data": "Содержит данные измерения"
 }
