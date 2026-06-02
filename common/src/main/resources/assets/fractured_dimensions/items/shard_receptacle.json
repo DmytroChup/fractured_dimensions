@@ -1,0 +1,15 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "property": "minecraft:has_component",
+    "component": "fractured_dimensions:dimension_data",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "fractured_dimensions:item/shard_receptacle"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "fractured_dimensions:item/shard_receptacle_filled"
+    }
+  }
+}
