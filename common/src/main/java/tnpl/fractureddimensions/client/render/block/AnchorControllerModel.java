@@ -16,6 +16,9 @@ public class AnchorControllerModel extends GeoModel<AnchorControllerBlockEntity>
 
     public static final DataTicket<MultiblockState> STATE_TICKET =
             DataTicket.create("multiblock_state", new TypeToken<>() {});
+            
+    public static final DataTicket<Boolean> UNDEPLOYING_TICKET =
+            DataTicket.create("is_undeploying", new TypeToken<>() {});
 
     @Override
     public void addAdditionalStateData(
@@ -26,6 +29,7 @@ public class AnchorControllerModel extends GeoModel<AnchorControllerBlockEntity>
         if (animatable.getBlockState().hasProperty(AnchorControllerBlock.MULTIBLOCK_STATE)) {
             renderState.addGeckolibData(STATE_TICKET, animatable.getBlockState().getValue(AnchorControllerBlock.MULTIBLOCK_STATE));
         }
+        renderState.addGeckolibData(UNDEPLOYING_TICKET, animatable.isUndeploying());
     }
 
     @Override
@@ -37,7 +41,9 @@ public class AnchorControllerModel extends GeoModel<AnchorControllerBlockEntity>
     @Override
     public @NonNull Identifier getTextureResource(GeoRenderState renderState) {
         MultiblockState state = renderState.getGeckolibData(STATE_TICKET);
-        if (state == MultiblockState.IDLE || state == MultiblockState.READY) {
+        Boolean isUndeploying = renderState.getGeckolibData(UNDEPLOYING_TICKET);
+        
+        if (state == MultiblockState.IDLE || state == MultiblockState.READY || (isUndeploying != null && isUndeploying)) {
             return Identifier.fromNamespaceAndPath(Constants.MOD_ID,
                     "textures/block/anchor_controller_idle_ready_3d.png");
         }

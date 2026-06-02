@@ -26,6 +26,9 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
             .thenPlay("deploy")
             .thenLoop("idle_ready");
 
+    private static final RawAnimation UNDEPLOY_ANIM = RawAnimation.begin()
+            .thenPlay("deploy_back");
+
     private static final String NBT_STATE = "MultiblockState";
 
     /** How often the controller re-validates the structure. 40 ticks = 2 seconds */
@@ -34,6 +37,9 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
     private MultiblockState currentState;
     private int tickCounter;
 
+    private MultiblockState clientPrevState = null;
+    private boolean isUndeploying = false;
+
     public AnchorControllerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ANCHOR_CONTROLLER.get(), pos, state);
         this.currentState = MultiblockState.INCOMPLETE;
@@ -41,6 +47,10 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
 
     public MultiblockState getCurrentState() {
         return currentState;
+    }
+
+    public boolean isUndeploying() {
+        return isUndeploying;
     }
 
     public void setCurrentState(MultiblockState newState) {
@@ -65,8 +75,34 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
         if (this.getBlockState().hasProperty(AnchorControllerBlock.MULTIBLOCK_STATE)) {
             MultiblockState mState = this.getBlockState().getValue(AnchorControllerBlock.MULTIBLOCK_STATE);
             
-            if (mState == MultiblockState.READY) {
-                return event.setAndContinue(DEPLOY_ANIM);
+            if (clientPrevState == null) {
+                clientPrevState = mState;
+            }
+
+            switch (mState) {
+                case MultiblockState.READY -> {
+                    clientPrevState = mState;
+                    isUndeploying = false;
+                    return event.setAndContinue(DEPLOY_ANIM);
+                }
+                case MultiblockState.IDLE, MultiblockState.INCOMPLETE -> {
+                    if (clientPrevState == MultiblockState.READY) {
+                        isUndeploying = true;
+                    }
+                    clientPrevState = mState;
+
+                    if (isUndeploying) {
+                        if (event.controller().hasAnimationFinished()) {
+                            isUndeploying = false;
+                            return PlayState.STOP;
+                        }
+                        return event.setAndContinue(UNDEPLOY_ANIM);
+                    }
+                }
+                default -> {
+                    clientPrevState = mState;
+                    isUndeploying = false;
+                }
             }
         }
         return PlayState.STOP;
