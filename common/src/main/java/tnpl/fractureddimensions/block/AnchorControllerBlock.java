@@ -2,6 +2,8 @@ package tnpl.fractureddimensions.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -14,6 +16,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import tnpl.fractureddimensions.block.entity.AnchorControllerBlockEntity;
@@ -42,6 +45,27 @@ public class AnchorControllerBlock extends Block implements EntityBlock {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+    }
+
+    @Override
+    protected @NonNull InteractionResult useWithoutItem(@NonNull BlockState state, @NonNull Level level,
+                                                         @NonNull BlockPos pos, @NonNull Player player,
+                                                         @NonNull BlockHitResult hitResult) {
+        if (level.isClientSide()) {
+            return InteractionResult.SUCCESS;
+        }
+
+        MultiblockState multiblockState = state.getValue(MULTIBLOCK_STATE);
+        if (multiblockState != MultiblockState.READY && multiblockState != MultiblockState.ACTIVE) {
+            return InteractionResult.PASS;
+        }
+
+        if (level.getBlockEntity(pos) instanceof AnchorControllerBlockEntity be) {
+            player.openMenu(be);
+            return InteractionResult.CONSUME;
+        }
+
+        return InteractionResult.PASS;
     }
 
     @Override

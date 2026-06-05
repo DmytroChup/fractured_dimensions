@@ -9,16 +9,30 @@ import com.geckolib.animation.object.PlayState;
 import com.geckolib.util.GeckoLibUtil;
 import com.geckolib.animation.state.AnimationTest;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import tnpl.fractureddimensions.block.AnchorControllerBlock;
+import tnpl.fractureddimensions.block.entity.menu.AnchorControllerMenu;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
 
-public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlockEntity {
+import java.util.List;
+
+public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlockEntity, MenuProvider {
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -30,6 +44,7 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
             .thenPlay("deploy_back");
 
     private static final String NBT_STATE = "MultiblockState";
+    private static final String NBT_INVENTORY = "Inventory";
 
     /** How often the controller re-validates the structure. 40 ticks = 2 seconds */
     private static final int CHECK_INTERVAL = 40;
@@ -37,8 +52,39 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
     private MultiblockState currentState;
     private int tickCounter;
 
+    private final SimpleContainer inventory = new SimpleContainer(AnchorControllerMenu.CONTAINER_SIZE) {
+        @Override
+        public void setChanged() {
+            super.setChanged();
+            AnchorControllerBlockEntity.this.setChanged();
+        }
+    };
+
     private MultiblockState clientPrevState = null;
     private boolean isUndeploying = false;
+
+    /**
+     * ContainerData that is passed into every menu instance.
+     * Slot 0 = state ordinal, slot 1 = energy permille (0–1000).
+     * This anonymous class reads live from the block entity, so it is
+     * always up-to-date when Minecraft syncs it to the client.
+     */
+    private final ContainerData containerData = new ContainerData() {
+        @Override
+        public int get(int index) {
+            return switch (index) {
+                case AnchorControllerMenu.DATA_STATE -> currentState.ordinal();
+                case AnchorControllerMenu.DATA_ENERGY_PERMILLE -> computeEnergyPermille();
+                default -> 0;
+            };
+        }
+
+        @Override
+        public void set(int index, int value) { /* read-only on server */ }
+
+        @Override
+        public int getCount() { return AnchorControllerMenu.DATA_COUNT; }
+    };
 
     public AnchorControllerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ANCHOR_CONTROLLER.get(), pos, state);
@@ -196,10 +242,42 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
         }
     }
 
+    /**
+     * Computes the total energy across all 5 energy cores as a permille value (0–1000).
+     * Used by ContainerData to sync energy to the client screen.
+     */
+    private int computeEnergyPermille() {
+        if (this.level == null) return 0;
+
+        BlockPos[] corePositions = {
+            this.worldPosition.offset(2, 1, -1),
+            this.worldPosition.offset(-2, 1, -1),
+            this.worldPosition.offset(2, 1, 1),
+            this.worldPosition.offset(-2, 1, 1),
+            this.worldPosition.offset(0, 1, -2)
+        };
+
+        long totalEnergy = 0;
+        long totalMax   = 0;
+        for (BlockPos corePos : corePositions) {
+            if (this.level.getBlockEntity(corePos) instanceof EnergyCoreBlockEntity core) {
+                totalEnergy += core.getEnergy();
+                totalMax    += core.getMaxEnergy();
+            }
+        }
+        if (totalMax <= 0) return 0;
+        return (int) Math.min(1000L, totalEnergy * 1000L / totalMax);
+    }
+
     @Override
     protected void saveAdditional(@NonNull ValueOutput output) {
         super.saveAdditional(output);
         output.putString(NBT_STATE, this.currentState.getSerializedName());
+        List<ItemStack> items = NonNullList.withSize(this.inventory.getContainerSize(), ItemStack.EMPTY);
+        for (int i = 0; i < this.inventory.getContainerSize(); i++) {
+            items.set(i, this.inventory.getItem(i));
+        }
+        output.store(NBT_INVENTORY, ItemStack.OPTIONAL_CODEC.listOf(), items);
     }
 
     @Override
@@ -208,5 +286,26 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
         this.currentState = MultiblockState.fromName(
                 input.getStringOr(NBT_STATE, MultiblockState.INCOMPLETE.getSerializedName())
         );
+        List<ItemStack> items = input.read(NBT_INVENTORY, ItemStack.OPTIONAL_CODEC.listOf()).orElse(List.of());
+        for (int i = 0; i < items.size() && i < this.inventory.getContainerSize(); i++) {
+            this.inventory.setItem(i, items.get(i));
+        }
+    }
+
+    // ── MenuProvider ──────────────────────────────────────────────────────
+
+    @Override
+    public @NonNull Component getDisplayName() {
+        return Component.translatable("container.fractured_dimensions.anchor_controller");
+    }
+
+    @Override
+    public @Nullable AbstractContainerMenu createMenu(int containerId, @NonNull Inventory playerInventory, @NonNull Player player) {
+        return new AnchorControllerMenu(containerId, playerInventory, this.inventory,
+                ContainerLevelAccess.create(this.level, this.worldPosition), this.containerData);
+    }
+
+    public SimpleContainer getInventory() {
+        return this.inventory;
     }
 }
