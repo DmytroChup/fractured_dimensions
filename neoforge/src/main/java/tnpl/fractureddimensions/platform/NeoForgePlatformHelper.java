@@ -1,6 +1,9 @@
 package tnpl.fractureddimensions.platform;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -8,11 +11,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.common.extensions.IMenuTypeExtension;
 import tnpl.fractureddimensions.platform.services.IPlatformHelper;
 import tnpl.fractureddimensions.registry.BlockEntityFactory;
 import tnpl.fractureddimensions.registry.ModItems;
 
 import java.util.List;
+import java.util.function.BiFunction;
 
 public class NeoForgePlatformHelper implements IPlatformHelper {
 
@@ -37,6 +42,12 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
     @Override
     public <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BlockEntityFactory<T> factory, Block... blocks) {
         return new BlockEntityType<>(factory::create, blocks);
+    }
+
+    @Override
+    public <T extends AbstractContainerMenu> MenuType<T> createMenuType(BiFunction<Integer, Inventory, T> factory) {
+        return IMenuTypeExtension.create((containerId, inventory, buf)
+                -> factory.apply(containerId, inventory));
     }
 
     @Override
