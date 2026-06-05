@@ -14,6 +14,7 @@ public class FracturedDimensionsNeoForge {
 
         if (FMLEnvironment.getDist() == Dist.CLIENT) {
             eventBus.addListener(NeoForgeClientModEvents::registerRenderers);
+            eventBus.addListener(NeoForgeClientModEvents::registerScreens);
         }
     }
 }
