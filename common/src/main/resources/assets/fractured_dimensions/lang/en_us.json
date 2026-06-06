@@ -23,5 +23,12 @@
 
   "item.fractured_dimensions.shard_receptacle": "Shard Receptacle",
   "tooltip.fractured_dimensions.shard_receptacle.empty": "Empty",
-  "tooltip.fractured_dimensions.shard_receptacle.contains_data": "Contains Dimension Data"
+  "tooltip.fractured_dimensions.shard_receptacle.contains_data": "Contains Dimension Data",
+
+  "gui.fractured_dimensions.distance": "Distance: %s ly",
+  "gui.fractured_dimensions.difficulty": "Difficulty: %s",
+  "gui.fractured_dimensions.survival": "Survival: %s min",
+  "gui.fractured_dimensions.difficulty.0": "Easy",
+  "gui.fractured_dimensions.difficulty.1": "Normal",
+  "gui.fractured_dimensions.difficulty.2": "Hard"
 }

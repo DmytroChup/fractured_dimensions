@@ -22,6 +22,9 @@ public class AnchorControllerScreen extends AbstractContainerScreen<AnchorContro
     private static final Identifier SPACE_BG = Identifier.fromNamespaceAndPath(
             Constants.MOD_ID, "textures/gui/container/space_bg.png");
 
+    private static final Identifier COSMIC_OBJECTS_TEX = Identifier.fromNamespaceAndPath(
+            Constants.MOD_ID, "textures/gui/container/cosmic_objects.png");
+
     private static final int V0 = AnchorControllerMenu.TEX_V_ORIGIN;
 
     private static final int MAP_X = 5;
@@ -73,9 +76,16 @@ public class AnchorControllerScreen extends AbstractContainerScreen<AnchorContro
                 double x = clusterX + random.nextGaussian() * 150;
                 double y = clusterY + random.nextGaussian() * 150;
                 int type = random.nextInt(3); 
+                int variant = random.nextInt(3);
                 String[] names = {"Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Sigma", "Omega"};
                 String name = names[random.nextInt(names.length)] + "-" + (100 + random.nextInt(900));
-                cosmicObjects.add(new CosmicObject(cosmicObjects.size(), x, y, type, name));
+                
+                int distance = 1000 + random.nextInt(9000);
+                int difficulty = random.nextInt(3);
+                int[] times = {5, 10, 15};
+                int survivalTime = times[random.nextInt(times.length)];
+                
+                cosmicObjects.add(new CosmicObject(cosmicObjects.size(), x, y, type, variant, name, distance, difficulty, survivalTime));
             }
         }
     }
@@ -131,26 +141,76 @@ public class AnchorControllerScreen extends AbstractContainerScreen<AnchorContro
             double objScreenX = mapScreenX + MAP_W / 2.0 + (obj.x * mapScale) + mapOffsetX;
             double objScreenY = mapScreenY + MAP_H / 2.0 + (obj.y * mapScale) + mapOffsetY;
             
-            double renderSize = 2 * mapScale;
+            int drawSize = (int)(16 * mapScale);
             
             if (objScreenX < mapScreenX - 20 || objScreenX > mapScreenX + MAP_W + 20) continue;
             if (objScreenY < mapScreenY - 20 || objScreenY > mapScreenY + MAP_H + 20) continue;
             
-            int color;
-            if (obj.type == 0) color = 0xFFFFAA;
-            else if (obj.type == 1) color = 0xAAFFAA;
-            else color = 0xAAAAAA;
-            
             if (selectedObject == obj) {
-                int highlightSize = (int)(renderSize + 2);
-                graphics.fill((int)objScreenX - highlightSize, (int)objScreenY - highlightSize, 
-                              (int)objScreenX + highlightSize, (int)objScreenY + highlightSize, 0xFF00FF00);
+                int hl = (drawSize / 2) + 1;
+                int x1 = (int)objScreenX - hl;
+                int y1 = (int)objScreenY - hl;
+                int x2 = (int)objScreenX + hl;
+                int y2 = (int)objScreenY + hl;
+                int color = 0xFF00FF00;
+                
+                graphics.fill(x1, y1, x2, y1 + 1, color);
+                graphics.fill(x1, y2 - 1, x2, y2, color);
+                graphics.fill(x1, y1, x1 + 1, y2, color);
+                graphics.fill(x2 - 1, y1, x2, y2, color);
             }
-            graphics.fill((int)objScreenX - (int)renderSize, (int)objScreenY - (int)renderSize, 
-                          (int)objScreenX + (int)renderSize, (int)objScreenY + (int)renderSize, color | 0xFF000000);
+
+            int u = obj.variant * 16;
+            int v = obj.type * 16;
+
+            graphics.blit(RenderPipelines.GUI_TEXTURED, COSMIC_OBJECTS_TEX,
+                    (int)objScreenX - drawSize / 2, (int)objScreenY - drawSize / 2,
+                    u, v,
+                    drawSize, drawSize,
+                    16, 16,
+                    48, 48);
         }
         
         graphics.disableScissor();
+
+        if (selectedObject != null) {
+            double objScreenX = mapScreenX + MAP_W / 2.0 + (selectedObject.x * mapScale) + mapOffsetX;
+            double objScreenY = mapScreenY + MAP_H / 2.0 + (selectedObject.y * mapScale) + mapOffsetY;
+
+            if (objScreenX >= mapScreenX && objScreenX <= mapScreenX + MAP_W &&
+                objScreenY >= mapScreenY && objScreenY <= mapScreenY + MAP_H) {
+                
+                int boxWidth = 140;
+                int boxHeight = 55;
+
+                int tooltipX = (int)objScreenX + 15;
+                int tooltipY = (int)objScreenY + 15;
+
+                if (tooltipX + boxWidth > mapScreenX + MAP_W) {
+                    tooltipX = (int)objScreenX - boxWidth - 15;
+                }
+
+                if (tooltipY + boxHeight > mapScreenY + MAP_H) {
+                    tooltipY = (int)objScreenY - boxHeight - 15;
+                }
+
+                graphics.fill(tooltipX, tooltipY, tooltipX + boxWidth, tooltipY + boxHeight, 0xDD000000);
+
+                graphics.fill(tooltipX, tooltipY, tooltipX + boxWidth, tooltipY + 1, 0xFF555555);
+                graphics.fill(tooltipX, tooltipY + boxHeight - 1, tooltipX + boxWidth, tooltipY + boxHeight, 0xFF555555);
+                graphics.fill(tooltipX, tooltipY, tooltipX + 1, tooltipY + boxHeight, 0xFF555555);
+                graphics.fill(tooltipX + boxWidth - 1, tooltipY, tooltipX + boxWidth, tooltipY + boxHeight, 0xFF555555);
+
+                Component distanceText = Component.translatable("gui.fractured_dimensions.distance", selectedObject.distance);
+                Component difficultyText = Component.translatable("gui.fractured_dimensions.difficulty", Component.translatable("gui.fractured_dimensions.difficulty." + selectedObject.difficulty));
+                Component survivalText = Component.translatable("gui.fractured_dimensions.survival", selectedObject.survivalTime);
+
+                graphics.text(this.font, selectedObject.name, tooltipX + 5, tooltipY + 5, 0xFFFFFFAA, false);
+                graphics.text(this.font, distanceText, tooltipX + 5, tooltipY + 18, 0xFFFFFFFF, false);
+                graphics.text(this.font, difficultyText, tooltipX + 5, tooltipY + 30, 0xFFFFFFFF, false);
+                graphics.text(this.font, survivalText, tooltipX + 5, tooltipY + 42, 0xFFFFFFFF, false);
+            }
+        }
 
         super.extractRenderState(graphics, mouseX, mouseY, partialTick);
     }
@@ -166,16 +226,22 @@ public class AnchorControllerScreen extends AbstractContainerScreen<AnchorContro
         
         if (!isSecondary && lastMouseX >= mapScreenX && lastMouseX <= mapScreenX + MAP_W && lastMouseY >= mapScreenY && lastMouseY <= mapScreenY + MAP_H) {
             this.isDraggingMap = true;
-            
+
             for (CosmicObject obj : cosmicObjects) {
                 double objScreenX = mapScreenX + MAP_W / 2.0 + (obj.x * mapScale) + mapOffsetX;
                 double objScreenY = mapScreenY + MAP_H / 2.0 + (obj.y * mapScale) + mapOffsetY;
                 
-                double hitBox = 4 * Math.max(1.0, mapScale);
+                double hitBox = 8 * mapScale;
                 if (lastMouseX >= objScreenX - hitBox && lastMouseX <= objScreenX + hitBox && lastMouseY >= objScreenY - hitBox && lastMouseY <= objScreenY + hitBox) {
-                    this.selectedObject = obj;
+                    if (this.selectedObject == obj) {
+                        this.selectedObject = null;
+                    } else {
+                        this.selectedObject = obj;
+                    }
+                    break;
                 }
             }
+            
             return true;
         }
         return super.mouseClicked(event, isSecondary);
@@ -222,6 +288,6 @@ public class AnchorControllerScreen extends AbstractContainerScreen<AnchorContro
         return super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);
     }
 
-    private record CosmicObject(int id, double x, double y, int type, String name) {
+    private record CosmicObject(int id, double x, double y, int type, int variant, String name, int distance, int difficulty, int survivalTime) {
     }
 }
