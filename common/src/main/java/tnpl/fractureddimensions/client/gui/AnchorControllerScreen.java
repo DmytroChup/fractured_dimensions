@@ -66,15 +66,20 @@ public class AnchorControllerScreen extends AbstractContainerScreen<AnchorContro
         
         cosmicObjects.clear();
 
-        int numClusters = 4 + random.nextInt(3);
-        for (int c = 0; c < numClusters; c++) {
-            double clusterX = (random.nextDouble() - 0.5) * 2400;
-            double clusterY = (random.nextDouble() - 0.5) * 2400;
+        int gridSize = 5;
+        double cellSize = 2400.0 / gridSize;
+        double startX = -1200.0;
+        double startY = -1200.0;
 
-            int numObjects = 5 + random.nextInt(6); 
-            for (int i = 0; i < numObjects; i++) {
-                double x = clusterX + random.nextGaussian() * 150;
-                double y = clusterY + random.nextGaussian() * 150;
+        for (int row = 0; row < gridSize; row++) {
+            for (int col = 0; col < gridSize; col++) {
+                double cellCenterX = startX + (col * cellSize) + (cellSize / 2.0);
+                double cellCenterY = startY + (row * cellSize) + (cellSize / 2.0);
+
+                double maxJitter = (cellSize / 2.0) - 60; 
+                double x = cellCenterX + (random.nextDouble() * 2 - 1) * maxJitter;
+                double y = cellCenterY + (random.nextDouble() * 2 - 1) * maxJitter;
+
                 int type = random.nextInt(3); 
                 int variant = random.nextInt(3);
                 String[] names = {"Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Sigma", "Omega"};
