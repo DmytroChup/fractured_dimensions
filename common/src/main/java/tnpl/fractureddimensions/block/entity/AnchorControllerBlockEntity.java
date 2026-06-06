@@ -75,6 +75,8 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
             return switch (index) {
                 case AnchorControllerMenu.DATA_STATE -> currentState.ordinal();
                 case AnchorControllerMenu.DATA_ENERGY_PERMILLE -> computeEnergyPermille();
+                case AnchorControllerMenu.DATA_SEED_LOW -> worldPosition.hashCode() & 0xFFFF;
+                case AnchorControllerMenu.DATA_SEED_HIGH -> (worldPosition.hashCode() >> 16) & 0xFFFF;
                 default -> 0;
             };
         }

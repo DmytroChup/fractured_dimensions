@@ -28,7 +28,9 @@ public class AnchorControllerMenu extends AbstractContainerMenu {
     // ContainerData indices
     public static final int DATA_STATE           = 0;
     public static final int DATA_ENERGY_PERMILLE = 1;
-    public static final int DATA_COUNT           = 2;
+    public static final int DATA_SEED_LOW        = 2;
+    public static final int DATA_SEED_HIGH       = 3;
+    public static final int DATA_COUNT           = 4;
 
     // GUI total dimensions (matches the drawn area of the texture)
     public static final int GUI_WIDTH  = 246;
@@ -136,6 +138,10 @@ public class AnchorControllerMenu extends AbstractContainerMenu {
 
     public static boolean isLens(ItemStack stack) {
         return VALID_LENSES.contains(stack.getItem());
+    }
+
+    public int getSeed() {
+        return (this.data.get(DATA_SEED_HIGH) << 16) | (this.data.get(DATA_SEED_LOW) & 0xFFFF);
     }
 
     // ── Shift-click logic ──────────────────────────────────────────────────
