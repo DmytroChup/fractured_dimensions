@@ -25,12 +25,15 @@ public class AnchorControllerScreen extends AbstractContainerScreen<AnchorContro
     private static final Identifier COSMIC_OBJECTS_TEX = Identifier.fromNamespaceAndPath(
             Constants.MOD_ID, "textures/gui/container/cosmic_objects.png");
 
+    private static final Identifier STATIC_NOISE_TEX = Identifier.fromNamespaceAndPath(
+            Constants.MOD_ID, "textures/gui/container/static_noise.png");
+
     private static final int V0 = AnchorControllerMenu.TEX_V_ORIGIN;
 
-    private static final int MAP_X = 5;
-    private static final int MAP_Y = 5;
-    private static final int MAP_W = 206; 
-    private static final int MAP_H = 116; 
+    private static final int MAP_X = 3;
+    private static final int MAP_Y = 3;
+    private static final int MAP_W = 210;
+    private static final int MAP_H = 122;
     
     private final List<CosmicObject> cosmicObjects = new ArrayList<>();
     private CosmicObject selectedObject = null;
@@ -125,60 +128,87 @@ public class AnchorControllerScreen extends AbstractContainerScreen<AnchorContro
         
         graphics.enableScissor(mapScreenX, mapScreenY, mapScreenX + MAP_W, mapScreenY + MAP_H);
         
-        int bgSize = 256;
-        int bgOffsetX = (int) (mapOffsetX * 0.3) % bgSize; 
-        if (bgOffsetX > 0) bgOffsetX -= bgSize;
+        boolean hasLens = this.menu.getSlot(AnchorControllerMenu.LENS_SLOT).hasItem();
         
-        int bgOffsetY = (int) (mapOffsetY * 0.3) % bgSize;
-        if (bgOffsetY > 0) bgOffsetY -= bgSize;
-
-        for (int dx = bgOffsetX; dx < MAP_W; dx += bgSize) {
-            for (int dy = bgOffsetY; dy < MAP_H; dy += bgSize) {
-                graphics.blit(RenderPipelines.GUI_TEXTURED, SPACE_BG,
-                        mapScreenX + dx, mapScreenY + dy,
-                        0f, 0f,
-                        bgSize, bgSize,
-                        bgSize, bgSize);
+        if (!hasLens) {
+            this.selectedObject = null;
+            
+            int noiseFrame = (int) (System.currentTimeMillis() / 50);
+            int noiseOffsetX = (noiseFrame * 37) % 64;
+            int noiseOffsetY = (noiseFrame * 17) % 64;
+            if (noiseOffsetX > 0) noiseOffsetX -= 64;
+            if (noiseOffsetY > 0) noiseOffsetY -= 64;
+            
+            for (int dx = noiseOffsetX; dx < MAP_W; dx += 64) {
+                for (int dy = noiseOffsetY; dy < MAP_H; dy += 64) {
+                    graphics.blit(RenderPipelines.GUI_TEXTURED, STATIC_NOISE_TEX,
+                            mapScreenX + dx, mapScreenY + dy,
+                            0f, 0f,
+                            64, 64,
+                            64, 64);
+                }
             }
-        }
-        
-        for (CosmicObject obj : cosmicObjects) {
-            double objScreenX = mapScreenX + MAP_W / 2.0 + (obj.x * mapScale) + mapOffsetX;
-            double objScreenY = mapScreenY + MAP_H / 2.0 + (obj.y * mapScale) + mapOffsetY;
             
-            int drawSize = (int)(16 * mapScale);
+            if ((System.currentTimeMillis() / 500) % 2 == 0) {
+                String errorMsg = "NO LENS DETECTED";
+                graphics.centeredText(this.font, errorMsg, mapScreenX + MAP_W / 2, mapScreenY + MAP_H / 2 - 4, 0xFFFF5555);
+            }
+        } else {
+            int bgSize = 256;
+            int bgOffsetX = (int) (mapOffsetX * 0.3) % bgSize; 
+            if (bgOffsetX > 0) bgOffsetX -= bgSize;
             
-            if (objScreenX < mapScreenX - 20 || objScreenX > mapScreenX + MAP_W + 20) continue;
-            if (objScreenY < mapScreenY - 20 || objScreenY > mapScreenY + MAP_H + 20) continue;
+            int bgOffsetY = (int) (mapOffsetY * 0.3) % bgSize;
+            if (bgOffsetY > 0) bgOffsetY -= bgSize;
+
+            for (int dx = bgOffsetX; dx < MAP_W; dx += bgSize) {
+                for (int dy = bgOffsetY; dy < MAP_H; dy += bgSize) {
+                    graphics.blit(RenderPipelines.GUI_TEXTURED, SPACE_BG,
+                            mapScreenX + dx, mapScreenY + dy,
+                            0f, 0f,
+                            bgSize, bgSize,
+                            bgSize, bgSize);
+                }
+            }
             
-            if (selectedObject == obj) {
-                int hl = (drawSize / 2) + 1;
-                int x1 = (int)objScreenX - hl;
-                int y1 = (int)objScreenY - hl;
-                int x2 = (int)objScreenX + hl;
-                int y2 = (int)objScreenY + hl;
-                int color = 0xFF00FF00;
+            for (CosmicObject obj : cosmicObjects) {
+                double objScreenX = mapScreenX + MAP_W / 2.0 + (obj.x * mapScale) + mapOffsetX;
+                double objScreenY = mapScreenY + MAP_H / 2.0 + (obj.y * mapScale) + mapOffsetY;
                 
-                graphics.fill(x1, y1, x2, y1 + 1, color);
-                graphics.fill(x1, y2 - 1, x2, y2, color);
-                graphics.fill(x1, y1, x1 + 1, y2, color);
-                graphics.fill(x2 - 1, y1, x2, y2, color);
+                int drawSize = (int)(16 * mapScale);
+                
+                if (objScreenX < mapScreenX - 20 || objScreenX > mapScreenX + MAP_W + 20) continue;
+                if (objScreenY < mapScreenY - 20 || objScreenY > mapScreenY + MAP_H + 20) continue;
+                
+                if (selectedObject == obj) {
+                    int hl = (drawSize / 2) + 1;
+                    int x1 = (int)objScreenX - hl;
+                    int y1 = (int)objScreenY - hl;
+                    int x2 = (int)objScreenX + hl;
+                    int y2 = (int)objScreenY + hl;
+                    int color = 0xFF00FF00;
+                    
+                    graphics.fill(x1, y1, x2, y1 + 1, color);
+                    graphics.fill(x1, y2 - 1, x2, y2, color);
+                    graphics.fill(x1, y1, x1 + 1, y2, color);
+                    graphics.fill(x2 - 1, y1, x2, y2, color);
+                }
+
+                int u = obj.variant * 16;
+                int v = obj.type * 16;
+
+                graphics.blit(RenderPipelines.GUI_TEXTURED, COSMIC_OBJECTS_TEX,
+                        (int)objScreenX - drawSize / 2, (int)objScreenY - drawSize / 2,
+                        u, v,
+                        drawSize, drawSize,
+                        16, 16,
+                        48, 48);
             }
-
-            int u = obj.variant * 16;
-            int v = obj.type * 16;
-
-            graphics.blit(RenderPipelines.GUI_TEXTURED, COSMIC_OBJECTS_TEX,
-                    (int)objScreenX - drawSize / 2, (int)objScreenY - drawSize / 2,
-                    u, v,
-                    drawSize, drawSize,
-                    16, 16,
-                    48, 48);
         }
         
         graphics.disableScissor();
 
-        if (selectedObject != null) {
+        if (hasLens && selectedObject != null) {
             double objScreenX = mapScreenX + MAP_W / 2.0 + (selectedObject.x * mapScale) + mapOffsetX;
             double objScreenY = mapScreenY + MAP_H / 2.0 + (selectedObject.y * mapScale) + mapOffsetY;
 
@@ -231,6 +261,9 @@ public class AnchorControllerScreen extends AbstractContainerScreen<AnchorContro
         
         if (!isSecondary && lastMouseX >= mapScreenX && lastMouseX <= mapScreenX + MAP_W && lastMouseY >= mapScreenY && lastMouseY <= mapScreenY + MAP_H) {
             this.isDraggingMap = true;
+            
+            boolean hasLens = this.menu.getSlot(AnchorControllerMenu.LENS_SLOT).hasItem();
+            if (!hasLens) return true;
 
             for (CosmicObject obj : cosmicObjects) {
                 double objScreenX = mapScreenX + MAP_W / 2.0 + (obj.x * mapScale) + mapOffsetX;
