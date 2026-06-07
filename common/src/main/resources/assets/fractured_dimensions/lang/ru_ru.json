@@ -23,12 +23,12 @@
 
   "item.fractured_dimensions.shard_receptacle": "Хранилище осколков",
   "tooltip.fractured_dimensions.shard_receptacle.empty": "Пусто",
-  "tooltip.fractured_dimensions.shard_receptacle.contains_data": "Содержит данные измерения",
 
   "gui.fractured_dimensions.distance": "Расстояние: %s св.л.",
   "gui.fractured_dimensions.difficulty": "Сложность: %s",
   "gui.fractured_dimensions.survival": "Выживание: %s мин",
   "gui.fractured_dimensions.difficulty.0": "Легкая",
   "gui.fractured_dimensions.difficulty.1": "Средняя",
-  "gui.fractured_dimensions.difficulty.2": "Сложная"
+  "gui.fractured_dimensions.difficulty.2": "Сложная",
+  "gui.fractured_dimensions.extract": "Извлечь"
 }

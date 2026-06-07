@@ -1,5 +1,6 @@
 package tnpl.fractureddimensions.client.gui;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -42,6 +43,7 @@ public class AnchorControllerScreen extends AbstractContainerScreen<AnchorContro
     private double mapOffsetY = 0;
     private double mapScale = 1.0;
     private boolean mapInitialized = false;
+    private int currentSeed = -1;
 
     private int lastMouseX = 0;
     private int lastMouseY = 0;
@@ -61,10 +63,10 @@ public class AnchorControllerScreen extends AbstractContainerScreen<AnchorContro
     }
 
     private void initMapIfNeeded() {
-        if (mapInitialized) return;
-        mapInitialized = true;
-        
         int seed = this.menu.getSeed();
+        if (mapInitialized && this.currentSeed == seed) return;
+        this.currentSeed = seed;
+        mapInitialized = true;
         RandomSource random = RandomSource.create(seed);
         
         cosmicObjects.clear();
@@ -216,8 +218,7 @@ public class AnchorControllerScreen extends AbstractContainerScreen<AnchorContro
                 objScreenY >= mapScreenY && objScreenY <= mapScreenY + MAP_H) {
                 
                 int boxWidth = 140;
-                int boxHeight = 55;
-
+                int boxHeight = 70;
                 int tooltipX = (int)objScreenX + 15;
                 int tooltipY = (int)objScreenY + 15;
 
@@ -244,6 +245,13 @@ public class AnchorControllerScreen extends AbstractContainerScreen<AnchorContro
                 graphics.text(this.font, distanceText, tooltipX + 5, tooltipY + 18, 0xFFFFFFFF, false);
                 graphics.text(this.font, difficultyText, tooltipX + 5, tooltipY + 30, 0xFFFFFFFF, false);
                 graphics.text(this.font, survivalText, tooltipX + 5, tooltipY + 42, 0xFFFFFFFF, false);
+
+                int extractBtnX = tooltipX + 5;
+                int extractBtnY = tooltipY + 54;
+                boolean hoverExtract = this.lastMouseX >= extractBtnX && this.lastMouseX <= extractBtnX + 130 && this.lastMouseY >= extractBtnY && this.lastMouseY <= extractBtnY + 12;
+                graphics.fill(extractBtnX, extractBtnY, extractBtnX + 130, extractBtnY + 12, hoverExtract ? 0xFF88AA88 : 0xFF558855);
+                Component extractText = Component.translatable("gui.fractured_dimensions.extract").withStyle(ChatFormatting.WHITE);
+                graphics.centeredText(this.font, extractText, extractBtnX + 65, extractBtnY + 2, 0xFFFFFFFF);
             }
         }
 
@@ -260,10 +268,39 @@ public class AnchorControllerScreen extends AbstractContainerScreen<AnchorContro
         int mapScreenY = this.topPos + MAP_Y;
         
         if (!isSecondary && lastMouseX >= mapScreenX && lastMouseX <= mapScreenX + MAP_W && lastMouseY >= mapScreenY && lastMouseY <= mapScreenY + MAP_H) {
-            this.isDraggingMap = true;
             
             boolean hasLens = this.menu.getSlot(AnchorControllerMenu.LENS_SLOT).hasItem();
             if (!hasLens) return true;
+
+            if (this.selectedObject != null) {
+                double objScreenX = mapScreenX + MAP_W / 2.0 + (this.selectedObject.x * mapScale) + mapOffsetX;
+                double objScreenY = mapScreenY + MAP_H / 2.0 + (this.selectedObject.y * mapScale) + mapOffsetY;
+                
+                int boxWidth = 140;
+                int boxHeight = 70;
+                int tooltipX = (int)objScreenX + 15;
+                int tooltipY = (int)objScreenY + 15;
+
+                if (tooltipX + boxWidth > mapScreenX + MAP_W) {
+                    tooltipX = (int) objScreenX - boxWidth - 15;
+                }
+                if (tooltipY + boxHeight > mapScreenY + MAP_H) {
+                    tooltipY = (int) objScreenY - boxHeight - 15;
+                }
+                
+                int extractBtnX = tooltipX + 5;
+                int extractBtnY = tooltipY + 54;
+                
+                if (lastMouseX >= extractBtnX && lastMouseX <= extractBtnX + 130 && lastMouseY >= extractBtnY && lastMouseY <= extractBtnY + 12) {
+                    if (this.minecraft.gameMode != null) {
+                        this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, this.selectedObject.id());
+                        this.selectedObject = null;
+                    }
+                    return true;
+                }
+            }
+
+            this.isDraggingMap = true;
 
             for (CosmicObject obj : cosmicObjects) {
                 double objScreenX = mapScreenX + MAP_W / 2.0 + (obj.x * mapScale) + mapOffsetX;
