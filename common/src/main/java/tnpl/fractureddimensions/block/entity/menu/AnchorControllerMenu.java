@@ -12,6 +12,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jspecify.annotations.NonNull;
+import tnpl.fractureddimensions.block.entity.AnchorControllerBlockEntity;
 import tnpl.fractureddimensions.registry.ModBlocks;
 import tnpl.fractureddimensions.registry.ModItems;
 import tnpl.fractureddimensions.registry.ModMenus;
@@ -142,6 +143,19 @@ public class AnchorControllerMenu extends AbstractContainerMenu {
 
     public int getSeed() {
         return (this.data.get(DATA_SEED_HIGH) << 16) | (this.data.get(DATA_SEED_LOW) & 0xFFFF);
+    }
+
+    @Override
+    public boolean clickMenuButton(@NonNull Player player, int id) {
+        if (this.access != ContainerLevelAccess.NULL) {
+            this.access.execute((level, pos) -> {
+                if (level.getBlockEntity(pos) instanceof AnchorControllerBlockEntity be) {
+                    be.extractObject(id, player);
+                }
+            });
+            return true;
+        }
+        return false;
     }
 
     // ── Shift-click logic ──────────────────────────────────────────────────

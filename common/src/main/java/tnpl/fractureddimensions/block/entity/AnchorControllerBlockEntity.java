@@ -8,9 +8,12 @@ import com.geckolib.animation.RawAnimation;
 import com.geckolib.animation.object.PlayState;
 import com.geckolib.util.GeckoLibUtil;
 import com.geckolib.animation.state.AnimationTest;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.SimpleContainer;
@@ -19,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.component.ItemLore;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -28,7 +32,10 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import tnpl.fractureddimensions.block.AnchorControllerBlock;
 import tnpl.fractureddimensions.block.entity.menu.AnchorControllerMenu;
+import tnpl.fractureddimensions.component.DimensionData;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
+import tnpl.fractureddimensions.registry.ModDataComponents;
+import tnpl.fractureddimensions.registry.ModItems;
 
 import java.util.List;
 
@@ -45,12 +52,14 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
 
     private static final String NBT_STATE = "MultiblockState";
     private static final String NBT_INVENTORY = "Inventory";
+    private static final String NBT_SEED_OFFSET = "SeedOffset";
 
     /** How often the controller re-validates the structure. 40 ticks = 2 seconds */
     private static final int CHECK_INTERVAL = 40;
 
     private MultiblockState currentState;
     private int tickCounter;
+    private int seedOffset = 0;
 
     private final SimpleContainer inventory = new SimpleContainer(AnchorControllerMenu.CONTAINER_SIZE) {
         @Override
@@ -75,8 +84,8 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
             return switch (index) {
                 case AnchorControllerMenu.DATA_STATE -> currentState.ordinal();
                 case AnchorControllerMenu.DATA_ENERGY_PERMILLE -> computeEnergyPermille();
-                case AnchorControllerMenu.DATA_SEED_LOW -> worldPosition.hashCode() & 0xFFFF;
-                case AnchorControllerMenu.DATA_SEED_HIGH -> (worldPosition.hashCode() >> 16) & 0xFFFF;
+                case AnchorControllerMenu.DATA_SEED_LOW -> (worldPosition.hashCode() + seedOffset) & 0xFFFF;
+                case AnchorControllerMenu.DATA_SEED_HIGH -> ((worldPosition.hashCode() + seedOffset) >> 16) & 0xFFFF;
                 default -> 0;
             };
         }
@@ -275,6 +284,7 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
     protected void saveAdditional(@NonNull ValueOutput output) {
         super.saveAdditional(output);
         output.putString(NBT_STATE, this.currentState.getSerializedName());
+        output.putInt(NBT_SEED_OFFSET, this.seedOffset);
         List<ItemStack> items = NonNullList.withSize(this.inventory.getContainerSize(), ItemStack.EMPTY);
         for (int i = 0; i < this.inventory.getContainerSize(); i++) {
             items.set(i, this.inventory.getItem(i));
@@ -288,6 +298,7 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
         this.currentState = MultiblockState.fromName(
                 input.getStringOr(NBT_STATE, MultiblockState.INCOMPLETE.getSerializedName())
         );
+        this.seedOffset = input.getIntOr(NBT_SEED_OFFSET, 0);
         List<ItemStack> items = input.read(NBT_INVENTORY, ItemStack.OPTIONAL_CODEC.listOf()).orElse(List.of());
         for (int i = 0; i < items.size() && i < this.inventory.getContainerSize(); i++) {
             this.inventory.setItem(i, items.get(i));
@@ -305,6 +316,55 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
     public @Nullable AbstractContainerMenu createMenu(int containerId, @NonNull Inventory playerInventory, @NonNull Player player) {
         return new AnchorControllerMenu(containerId, playerInventory, this.inventory,
                 ContainerLevelAccess.create(this.level, this.worldPosition), this.containerData);
+    }
+
+    public void extractObject(int id, Player player) {
+        ItemStack receptacle = this.inventory.getItem(AnchorControllerMenu.RECEPTACLE_SLOT);
+        if (receptacle.isEmpty() || !receptacle.is(ModItems.SHARD_RECEPTACLE.get())) return;
+        if (receptacle.has(ModDataComponents.DIMENSION_DATA.get())) return;
+
+        String extractedName = "Unknown";
+        int extractedDistance = 0;
+        int extractedDifficulty = 0;
+        int extractedSurvivalTime = 0;
+
+        int gridSize = 5;
+        int currentIndex = 0;
+        int seed = this.worldPosition.hashCode() + this.seedOffset;
+        RandomSource random = RandomSource.create(seed);
+
+        for (int row = 0; row < gridSize; row++) {
+            for (int col = 0; col < gridSize; col++) {
+                random.nextDouble(); random.nextDouble(); // x, y
+                random.nextInt(3); random.nextInt(3); // type, variant
+                String[] names = {"Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Sigma", "Omega"};
+                String name = names[random.nextInt(names.length)] + "-" + (100 + random.nextInt(900));
+                int distance = 1000 + random.nextInt(9000);
+                int difficulty = random.nextInt(3);
+                int[] times = {5, 10, 15};
+                int survivalTime = times[random.nextInt(times.length)];
+
+                if (currentIndex == id) {
+                    extractedName = name;
+                    extractedDistance = distance;
+                    extractedDifficulty = difficulty;
+                    extractedSurvivalTime = survivalTime;
+                }
+                currentIndex++;
+            }
+        }
+
+        receptacle.set(ModDataComponents.DIMENSION_DATA.get(), new DimensionData(extractedName, extractedDistance, extractedDifficulty, extractedSurvivalTime));
+        receptacle.set(DataComponents.LORE, new ItemLore(java.util.List.of(
+                Component.literal(extractedName).withStyle(ChatFormatting.GOLD),
+                Component.translatable("gui.fractured_dimensions.distance", extractedDistance).withStyle(ChatFormatting.GRAY),
+                Component.translatable("gui.fractured_dimensions.difficulty", Component.translatable("gui.fractured_dimensions.difficulty." + extractedDifficulty)).withStyle(ChatFormatting.GRAY),
+                Component.translatable("gui.fractured_dimensions.survival", extractedSurvivalTime).withStyle(ChatFormatting.GRAY)
+        )));
+
+        this.seedOffset++;
+        this.setChanged();
+        this.syncBlockState();
     }
 
     public SimpleContainer getInventory() {
