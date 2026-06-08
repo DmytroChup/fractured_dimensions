@@ -72,7 +72,8 @@ public class ModBlocks {
             () -> new AnchorControllerBlock(blockBuilder("anchor_controller")
                     .mapColor(MapColor.COLOR_BLUE)
                     .strength(3.0F, 6.0F)
-                    .requiresCorrectToolForDrops()));
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()));
 
     private static BlockBehaviour.Properties blockBuilder(String name) {
         return BlockBehaviour.Properties.of()
