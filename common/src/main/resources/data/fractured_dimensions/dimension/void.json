@@ -1,14 +1,9 @@
 {
   "type": "fractured_dimensions:void",
   "generator": {
-    "type": "minecraft:flat",
-    "settings": {
-      "layers": [
-        {
-          "block": "minecraft:air",
-          "height": 1
-        }
-      ],
+    "type": "fractured_dimensions:void_generator",
+    "biome_source": {
+      "type": "minecraft:fixed",
       "biome": "minecraft:the_void"
     }
   }
