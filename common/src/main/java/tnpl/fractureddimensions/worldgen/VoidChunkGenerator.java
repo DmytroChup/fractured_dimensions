@@ -19,6 +19,7 @@ import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.synth.SimplexNoise;
 import net.minecraft.util.RandomSource;
 import tnpl.fractureddimensions.component.DimensionData;
+import tnpl.fractureddimensions.registry.ModBlocks;
 
 import java.util.List;
 import java.util.Map;
@@ -103,6 +104,10 @@ public class VoidChunkGenerator extends ChunkGenerator {
                             BlockPos localPos = new BlockPos(lx, y, lz);
                             if (y == topY) {
                                 chunk.setBlockState(localPos, grass, 0);
+                                if (relX == 5 && relZ == 0 && y + 1 < 320) {
+                                    BlockPos portalPos = new BlockPos(lx, y + 1, lz);
+                                    chunk.setBlockState(portalPos, ModBlocks.RETURN_PORTAL.get().defaultBlockState(), 0);
+                                }
                             } else if (y >= topY - 3) {
                                 chunk.setBlockState(localPos, dirt, 0);
                             } else {
