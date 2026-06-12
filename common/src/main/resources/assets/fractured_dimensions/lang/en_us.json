@@ -20,6 +20,7 @@
   "block.fractured_dimensions.energy_core": "Energy Core",
   "block.fractured_dimensions.anchor_controller": "Anchor Controller",
   "block.fractured_dimensions.energy_port": "Energy Port",
+  "block.fractured_dimensions.return_portal": "Return Portal",
 
   "item.fractured_dimensions.shard_receptacle": "Shard Receptacle",
   "tooltip.fractured_dimensions.shard_receptacle.empty": "Empty",
@@ -30,5 +31,6 @@
   "gui.fractured_dimensions.difficulty.0": "Easy",
   "gui.fractured_dimensions.difficulty.1": "Normal",
   "gui.fractured_dimensions.difficulty.2": "Hard",
-  "gui.fractured_dimensions.extract": "Extract"
+  "gui.fractured_dimensions.extract": "Extract",
+  "message.fractured_dimensions.return_portal.used": "You have safely returned to the overworld."
 }

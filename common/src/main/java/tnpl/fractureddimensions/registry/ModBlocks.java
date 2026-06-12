@@ -14,6 +14,7 @@ import tnpl.fractureddimensions.Constants;
 import tnpl.fractureddimensions.block.AnchorControllerBlock;
 import tnpl.fractureddimensions.block.EnergyCoreBlock;
 import tnpl.fractureddimensions.block.EnergyPortBlock;
+import tnpl.fractureddimensions.block.ReturnPortalBlock;
 import tnpl.fractureddimensions.registration.RegistrationProvider;
 import tnpl.fractureddimensions.registration.RegistryObject;
 
@@ -75,6 +76,15 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .noOcclusion()));
 
+    public static final RegistryObject<Block, ReturnPortalBlock> RETURN_PORTAL = registerBlockWithoutItem("return_portal",
+            () -> new ReturnPortalBlock(blockBuilder("return_portal")
+                    .mapColor(MapColor.COLOR_CYAN)
+                    .strength(-1.0F, 3600000.0F)
+                    .noOcclusion()
+                    .noLootTable()
+                    .lightLevel(state -> 10)
+                    .sound(SoundType.GLASS)));
+
     private static BlockBehaviour.Properties blockBuilder(String name) {
         return BlockBehaviour.Properties.of()
                 .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name)));
@@ -88,6 +98,10 @@ public class ModBlocks {
                 .setId(ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name)))));
 
         return block;
+    }
+
+    private static <T extends Block> RegistryObject<Block, T> registerBlockWithoutItem(String name, Supplier<T> blockSupplier) {
+        return BLOCKS.register(name, blockSupplier);
     }
 
     public static void init() {

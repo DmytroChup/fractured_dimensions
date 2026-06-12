@@ -20,6 +20,7 @@
   "block.fractured_dimensions.energy_core": "Энергетическое ядро",
   "block.fractured_dimensions.anchor_controller": "Контроллер якоря",
   "block.fractured_dimensions.energy_port": "Энергетический порт",
+  "block.fractured_dimensions.return_portal": "Портал возвращения",
 
   "item.fractured_dimensions.shard_receptacle": "Хранилище осколков",
   "tooltip.fractured_dimensions.shard_receptacle.empty": "Пусто",
@@ -30,5 +31,6 @@
   "gui.fractured_dimensions.difficulty.0": "Легкая",
   "gui.fractured_dimensions.difficulty.1": "Средняя",
   "gui.fractured_dimensions.difficulty.2": "Сложная",
-  "gui.fractured_dimensions.extract": "Извлечь"
+  "gui.fractured_dimensions.extract": "Извлечь",
+  "message.fractured_dimensions.return_portal.used": "Вы безопасно вернулись в обычный мир."
 }
