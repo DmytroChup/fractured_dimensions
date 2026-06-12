@@ -20,7 +20,7 @@ public class IslandManager extends SavedData {
     /**
      * Grid spacing between island centers (in blocks).
      */
-    private static final int GRID_SPACING = 1200;
+    private static final int GRID_SPACING = 6_000;
 
     private static final int ISLAND_Y = 100;
 
