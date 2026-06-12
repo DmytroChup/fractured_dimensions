@@ -78,7 +78,13 @@ public class ShardReceptacleItem extends Item {
         Constants.LOG.info("ShardReceptacleItem: New island '{}' at {} ({}min)",
                 data.name(), targetPos, data.survivalTime());
 
-        islandManager.addIsland(targetPos, data, voidLevel.getGameTime());
+        islandManager.addIsland(
+                targetPos, 
+                data, 
+                voidLevel.getGameTime(), 
+                serverLevel.dimension().identifier().toString(), 
+                serverPlayer.blockPosition()
+        );
 
         serverPlayer.teleportTo(
                 voidLevel,

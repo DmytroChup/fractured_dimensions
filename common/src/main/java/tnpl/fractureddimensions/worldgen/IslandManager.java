@@ -27,10 +27,12 @@ public class IslandManager extends SavedData {
     /** Static reference to the void dimension's manager, so ChunkGenerator can access it */
     private static final AtomicReference<IslandManager> voidInstance = new AtomicReference<>();
 
-    public record ActiveIsland(DimensionData data, long createdTick) {
+    public record ActiveIsland(DimensionData data, long createdTick, String returnDimension, BlockPos returnPos) {
         public static final Codec<ActiveIsland> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 DimensionData.CODEC.fieldOf("data").forGetter(ActiveIsland::data),
-                Codec.LONG.fieldOf("createdTick").forGetter(ActiveIsland::createdTick)
+                Codec.LONG.fieldOf("createdTick").forGetter(ActiveIsland::createdTick),
+                Codec.STRING.optionalFieldOf("returnDimension", "minecraft:overworld").forGetter(ActiveIsland::returnDimension),
+                BlockPos.CODEC.optionalFieldOf("returnPos", BlockPos.ZERO).forGetter(ActiveIsland::returnPos)
         ).apply(instance, ActiveIsland::new));
 
         public long expirationTick() {
@@ -134,11 +136,11 @@ public class IslandManager extends SavedData {
         };
     }
 
-    public void addIsland(BlockPos center, DimensionData data, long currentTick) {
-        islands.put(center, new ActiveIsland(data, currentTick));
+    public void addIsland(BlockPos center, DimensionData data, long currentTick, String returnDimension, BlockPos returnPos) {
+        islands.put(center, new ActiveIsland(data, currentTick, returnDimension, returnPos));
         setDirty();
-        Constants.LOG.info("IslandManager: Created island '{}' at {} (expires in {} min)",
-                data.name(), center, data.survivalTime());
+        Constants.LOG.info("IslandManager: Created island '{}' at {} (expires in {} min), return to {} in {}",
+                data.name(), center, data.survivalTime(), returnPos, returnDimension);
     }
 
     public void removeIsland(BlockPos center) {
