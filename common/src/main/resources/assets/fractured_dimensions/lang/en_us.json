@@ -32,5 +32,8 @@
   "gui.fractured_dimensions.difficulty.1": "Normal",
   "gui.fractured_dimensions.difficulty.2": "Hard",
   "gui.fractured_dimensions.extract": "Extract",
+  "gui.fractured_dimensions.timer.remaining": "Time Remaining",
+  "gui.fractured_dimensions.timer.island_time": "Island: %s | Time: %s",
+  "gui.fractured_dimensions.timer.island_destroyed": "Island: %s | DESTROYED",
   "message.fractured_dimensions.return_portal.used": "You have safely returned to the overworld."
 }

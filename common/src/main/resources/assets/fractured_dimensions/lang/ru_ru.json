@@ -32,5 +32,8 @@
   "gui.fractured_dimensions.difficulty.1": "Средняя",
   "gui.fractured_dimensions.difficulty.2": "Сложная",
   "gui.fractured_dimensions.extract": "Извлечь",
+  "gui.fractured_dimensions.timer.remaining": "Осталось времени",
+  "gui.fractured_dimensions.timer.island_time": "Остров: %s | Время: %s",
+  "gui.fractured_dimensions.timer.island_destroyed": "Остров: %s | УНИЧТОЖЕН",
   "message.fractured_dimensions.return_portal.used": "Вы безопасно вернулись в обычный мир."
 }
