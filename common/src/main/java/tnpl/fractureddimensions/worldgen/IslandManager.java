@@ -36,7 +36,7 @@ public class IslandManager extends SavedData {
         ).apply(instance, ActiveIsland::new));
 
         public long expirationTick() {
-            return createdTick + (long) data.survivalTime() * 60 * 20;
+            return createdTick + (long) data.survivalTime() * 60 * 20 + 200; // includes 10s grace period
         }
 
         public long ticksRemaining(long currentTick) {
@@ -48,9 +48,10 @@ public class IslandManager extends SavedData {
         }
 
         public double decayProgress(long currentTick) {
-            long totalTicks = (long) data.survivalTime() * 60 * 20;
+            long mainTime = (long) data.survivalTime() * 60 * 20;
+            long totalTicks = mainTime + 200; // decay reaches 100% exactly when grace period ends
             long elapsed = currentTick - createdTick;
-            long decayStart = (long) (totalTicks * 0.7);
+            long decayStart = (long) (mainTime * 0.1); // still starts at 10% of main time
 
             if (elapsed < decayStart) return 0.0;
             if (elapsed >= totalTicks) return 1.0;
@@ -159,7 +160,7 @@ public class IslandManager extends SavedData {
             BlockPos center = entry.getKey();
             DimensionData data = entry.getValue().data();
 
-            int baseRadius = 400 + (data.difficulty() * 10);
+            int baseRadius = data.getBaseRadius();
             int maxRadius = baseRadius + 100;
 
             double dx = (double) center.getX() - x;
