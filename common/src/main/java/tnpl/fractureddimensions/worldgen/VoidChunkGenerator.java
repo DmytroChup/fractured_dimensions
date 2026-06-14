@@ -70,7 +70,7 @@ public class VoidChunkGenerator extends ChunkGenerator {
             RandomSource random = RandomSource.create(seed);
             SimplexNoise noise = new SimplexNoise(random);
 
-            int baseRadius = 400 + (data.difficulty() * 10);
+            int baseRadius = data.getBaseRadius();
             int heightLimit = baseRadius / 3;
             
             BlockState stone = Blocks.STONE.defaultBlockState();

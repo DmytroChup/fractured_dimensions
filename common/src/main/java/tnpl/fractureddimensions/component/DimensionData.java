@@ -14,13 +14,14 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;
 
-public record DimensionData(String name, int distance, int difficulty, int survivalTime) implements TooltipProvider {
+public record DimensionData(String name, int distance, int difficulty, int survivalTime, int sizeType) implements TooltipProvider {
 
     public static final Codec<DimensionData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("name").forGetter(DimensionData::name),
             Codec.INT.fieldOf("distance").forGetter(DimensionData::distance),
             Codec.INT.fieldOf("difficulty").forGetter(DimensionData::difficulty),
-            Codec.INT.fieldOf("survivalTime").forGetter(DimensionData::survivalTime)
+            Codec.INT.fieldOf("survivalTime").forGetter(DimensionData::survivalTime),
+            Codec.INT.fieldOf("sizeType").forGetter(DimensionData::sizeType)
     ).apply(instance, DimensionData::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, DimensionData> STREAM_CODEC = StreamCodec.composite(
@@ -28,6 +29,7 @@ public record DimensionData(String name, int distance, int difficulty, int survi
             ByteBufCodecs.INT, DimensionData::distance,
             ByteBufCodecs.INT, DimensionData::difficulty,
             ByteBufCodecs.INT, DimensionData::survivalTime,
+            ByteBufCodecs.INT, DimensionData::sizeType,
             DimensionData::new
     );
 
@@ -39,5 +41,13 @@ public record DimensionData(String name, int distance, int difficulty, int survi
             @NonNull DataComponentGetter dataComponentGetter)
     {
         // Handled via LORE component directly
+    }
+
+    public int getBaseRadius() {
+        return switch (this.sizeType) {
+            case 0 -> 170;
+            case 1 -> 250;
+            default -> 350;
+        };
     }
 }

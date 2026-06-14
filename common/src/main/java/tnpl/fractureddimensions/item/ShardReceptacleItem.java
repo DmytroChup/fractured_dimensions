@@ -41,7 +41,8 @@ public class ShardReceptacleItem extends Item {
                             "Debug-" + level.getRandom().nextInt(1000),
                             level.getRandom().nextIntBetweenInclusive(1000, 9999),
                             level.getRandom().nextInt(3),
-                            10
+                            5,
+                            1
                     );
                     stack.set(ModDataComponents.DIMENSION_DATA.get(), debugData);
                     player.sendSystemMessage(Component.literal("§a[Debug] Filled Shard Receptacle!"));

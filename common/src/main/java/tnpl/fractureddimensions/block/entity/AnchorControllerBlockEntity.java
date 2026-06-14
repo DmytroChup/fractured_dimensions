@@ -327,6 +327,7 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
         int extractedDistance = 0;
         int extractedDifficulty = 0;
         int extractedSurvivalTime = 0;
+        int extractedSizeType = 0;
 
         int gridSize = 5;
         int currentIndex = 0;
@@ -343,23 +344,26 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
                 int difficulty = random.nextInt(3);
                 int[] times = {5, 10, 15};
                 int survivalTime = times[random.nextInt(times.length)];
+                int sizeType = random.nextInt(3);
 
                 if (currentIndex == id) {
                     extractedName = name;
                     extractedDistance = distance;
                     extractedDifficulty = difficulty;
                     extractedSurvivalTime = survivalTime;
+                    extractedSizeType = sizeType;
                 }
                 currentIndex++;
             }
         }
 
-        receptacle.set(ModDataComponents.DIMENSION_DATA.get(), new DimensionData(extractedName, extractedDistance, extractedDifficulty, extractedSurvivalTime));
+        receptacle.set(ModDataComponents.DIMENSION_DATA.get(), new DimensionData(extractedName, extractedDistance, extractedDifficulty, extractedSurvivalTime, extractedSizeType));
         receptacle.set(DataComponents.LORE, new ItemLore(java.util.List.of(
                 Component.literal(extractedName).withStyle(ChatFormatting.GOLD),
                 Component.translatable("gui.fractured_dimensions.distance", extractedDistance).withStyle(ChatFormatting.GRAY),
                 Component.translatable("gui.fractured_dimensions.difficulty", Component.translatable("gui.fractured_dimensions.difficulty." + extractedDifficulty)).withStyle(ChatFormatting.GRAY),
-                Component.translatable("gui.fractured_dimensions.survival", extractedSurvivalTime).withStyle(ChatFormatting.GRAY)
+                Component.translatable("gui.fractured_dimensions.survival", extractedSurvivalTime).withStyle(ChatFormatting.GRAY),
+                Component.translatable("gui.fractured_dimensions.size", Component.translatable("gui.fractured_dimensions.size." + extractedSizeType)).withStyle(ChatFormatting.GRAY)
         )));
 
         this.seedOffset++;

@@ -25,15 +25,25 @@
   "item.fractured_dimensions.shard_receptacle": "Хранилище осколков",
   "tooltip.fractured_dimensions.shard_receptacle.empty": "Пусто",
 
+  "container.fractured_dimensions.anchor_controller": "Интерфейс контроллера якоря",
+
   "gui.fractured_dimensions.distance": "Расстояние: %s св.л.",
-  "gui.fractured_dimensions.difficulty": "Сложность: %s",
   "gui.fractured_dimensions.survival": "Выживание: %s мин",
+
+  "gui.fractured_dimensions.difficulty": "Сложность: %s",
   "gui.fractured_dimensions.difficulty.0": "Легкая",
   "gui.fractured_dimensions.difficulty.1": "Средняя",
   "gui.fractured_dimensions.difficulty.2": "Сложная",
+
+  "gui.fractured_dimensions.size": "Размер: %s",
+  "gui.fractured_dimensions.size.0": "Маленький",
+  "gui.fractured_dimensions.size.1": "Средний",
+  "gui.fractured_dimensions.size.2": "Большой",
+
   "gui.fractured_dimensions.extract": "Извлечь",
   "gui.fractured_dimensions.timer.remaining": "Осталось времени",
   "gui.fractured_dimensions.timer.island_time": "Остров: %s | Время: %s",
+  "gui.fractured_dimensions.timer.critical": "КРИТИЧЕСКИЙ РАСПАД: %s с",
   "gui.fractured_dimensions.timer.island_destroyed": "Остров: %s | УНИЧТОЖЕН",
   "message.fractured_dimensions.return_portal.used": "Вы безопасно вернулись в обычный мир."
 }

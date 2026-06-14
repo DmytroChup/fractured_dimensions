@@ -25,15 +25,25 @@
   "item.fractured_dimensions.shard_receptacle": "Shard Receptacle",
   "tooltip.fractured_dimensions.shard_receptacle.empty": "Empty",
 
+  "container.fractured_dimensions.anchor_controller": "Anchor Controller Interface",
+
   "gui.fractured_dimensions.distance": "Distance: %s ly",
-  "gui.fractured_dimensions.difficulty": "Difficulty: %s",
   "gui.fractured_dimensions.survival": "Survival: %s min",
+
+  "gui.fractured_dimensions.difficulty": "Difficulty: %s",
   "gui.fractured_dimensions.difficulty.0": "Easy",
   "gui.fractured_dimensions.difficulty.1": "Normal",
   "gui.fractured_dimensions.difficulty.2": "Hard",
+
+  "gui.fractured_dimensions.size": "Size: %s",
+  "gui.fractured_dimensions.size.0": "Small",
+  "gui.fractured_dimensions.size.1": "Medium",
+  "gui.fractured_dimensions.size.2": "Large",
+
   "gui.fractured_dimensions.extract": "Extract",
   "gui.fractured_dimensions.timer.remaining": "Time Remaining",
   "gui.fractured_dimensions.timer.island_time": "Island: %s | Time: %s",
+  "gui.fractured_dimensions.timer.critical": "CRITICAL COLLAPSE: %s s",
   "gui.fractured_dimensions.timer.island_destroyed": "Island: %s | DESTROYED",
   "message.fractured_dimensions.return_portal.used": "You have safely returned to the overworld."
 }
