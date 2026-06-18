@@ -4,7 +4,7 @@
     "type": "fractured_dimensions:void_generator",
     "biome_source": {
       "type": "minecraft:fixed",
-      "biome": "minecraft:the_void"
+      "biome": "fractured_dimensions:stellar_void"
     }
   }
 }
