@@ -1,7 +1,6 @@
 package tnpl.fractureddimensions.item;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,21 +33,6 @@ public class ShardReceptacleItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
 
         if (!stack.has(ModDataComponents.DIMENSION_DATA.get())) {
-            // Debug feature: Shift + Right Click in Creative Mode fills the shard automatically
-            if (player.isCreative() && player.isCrouching()) {
-                if (!level.isClientSide()) {
-                    DimensionData debugData = new DimensionData(
-                            "Debug-" + level.getRandom().nextInt(1000),
-                            level.getRandom().nextIntBetweenInclusive(1000, 9999),
-                            level.getRandom().nextInt(3),
-                            5,
-                            1
-                    );
-                    stack.set(ModDataComponents.DIMENSION_DATA.get(), debugData);
-                    player.sendSystemMessage(Component.literal("§a[Debug] Filled Shard Receptacle!"));
-                }
-                return InteractionResult.SUCCESS;
-            }
             return InteractionResult.PASS;
         }
 
@@ -65,12 +49,22 @@ public class ShardReceptacleItem extends Item {
             return InteractionResult.PASS;
         }
 
+        boolean success = teleportToIsland(serverPlayer, serverLevel, data);
+
+        if (success && !player.isCreative()) {
+            stack.shrink(1);
+        }
+
+        return success ? InteractionResult.SUCCESS : InteractionResult.FAIL;
+    }
+
+    public static boolean teleportToIsland(ServerPlayer serverPlayer, ServerLevel serverLevel, DimensionData data) {
         MinecraftServer server = serverLevel.getServer();
         ServerLevel voidLevel = server.getLevel(ModDimensions.VOID_LEVEL);
 
         if (voidLevel == null) {
             Constants.LOG.error("ShardReceptacleItem: Void dimension ({}) not found!", ModDimensions.VOID_LEVEL);
-            return InteractionResult.FAIL;
+            return false;
         }
 
         IslandManager islandManager = IslandManager.get(voidLevel);
@@ -107,11 +101,6 @@ public class ShardReceptacleItem extends Item {
                         false
                 )
         );
-
-        if (!player.isCreative()) {
-            stack.shrink(1);
-        }
-
-        return InteractionResult.SUCCESS;
+        return true;
     }
 }
