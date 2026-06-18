@@ -328,6 +328,8 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
         int extractedDifficulty = 0;
         int extractedSurvivalTime = 0;
         int extractedSizeType = 0;
+        int extractedType = 0;
+        int extractedVariant = 0;
 
         int gridSize = 5;
         int currentIndex = 0;
@@ -337,7 +339,8 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
         for (int row = 0; row < gridSize; row++) {
             for (int col = 0; col < gridSize; col++) {
                 random.nextDouble(); random.nextDouble(); // x, y
-                random.nextInt(3); random.nextInt(3); // type, variant
+                int type = random.nextInt(3);
+                int variant = random.nextInt(3); // type, variant
                 String[] names = {"Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Sigma", "Omega"};
                 String name = names[random.nextInt(names.length)] + "-" + (100 + random.nextInt(900));
                 int distance = 1000 + random.nextInt(9000);
@@ -352,12 +355,14 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
                     extractedDifficulty = difficulty;
                     extractedSurvivalTime = survivalTime;
                     extractedSizeType = sizeType;
+                    extractedType = type;
+                    extractedVariant = variant;
                 }
                 currentIndex++;
             }
         }
 
-        receptacle.set(ModDataComponents.DIMENSION_DATA.get(), new DimensionData(extractedName, extractedDistance, extractedDifficulty, extractedSurvivalTime, extractedSizeType));
+        receptacle.set(ModDataComponents.DIMENSION_DATA.get(), new DimensionData(extractedName, extractedDistance, extractedDifficulty, extractedSurvivalTime, extractedSizeType, extractedType, extractedVariant));
         receptacle.set(DataComponents.LORE, new ItemLore(java.util.List.of(
                 Component.literal(extractedName).withStyle(ChatFormatting.GOLD),
                 Component.translatable("gui.fractured_dimensions.distance", extractedDistance).withStyle(ChatFormatting.GRAY),

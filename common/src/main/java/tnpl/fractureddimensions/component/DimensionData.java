@@ -14,14 +14,16 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;
 
-public record DimensionData(String name, int distance, int difficulty, int survivalTime, int sizeType) implements TooltipProvider {
+public record DimensionData(String name, int distance, int difficulty, int survivalTime, int sizeType, int type, int variant) implements TooltipProvider {
 
     public static final Codec<DimensionData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("name").forGetter(DimensionData::name),
             Codec.INT.fieldOf("distance").forGetter(DimensionData::distance),
             Codec.INT.fieldOf("difficulty").forGetter(DimensionData::difficulty),
             Codec.INT.fieldOf("survivalTime").forGetter(DimensionData::survivalTime),
-            Codec.INT.fieldOf("sizeType").forGetter(DimensionData::sizeType)
+            Codec.INT.fieldOf("sizeType").forGetter(DimensionData::sizeType),
+            Codec.INT.fieldOf("type").forGetter(DimensionData::type),
+            Codec.INT.fieldOf("variant").forGetter(DimensionData::variant)
     ).apply(instance, DimensionData::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, DimensionData> STREAM_CODEC = StreamCodec.composite(
@@ -30,6 +32,8 @@ public record DimensionData(String name, int distance, int difficulty, int survi
             ByteBufCodecs.INT, DimensionData::difficulty,
             ByteBufCodecs.INT, DimensionData::survivalTime,
             ByteBufCodecs.INT, DimensionData::sizeType,
+            ByteBufCodecs.INT, DimensionData::type,
+            ByteBufCodecs.INT, DimensionData::variant,
             DimensionData::new
     );
 
