@@ -85,6 +85,22 @@ public class ModBlocks {
                     .lightLevel(state -> 10)
                     .sound(SoundType.GLASS)));
 
+    public static final RegistryObject<Block, Block> YELLOW_DWARF_CRUST = registerBlock("yellow_dwarf_crust",
+            () -> new Block(blockBuilder("yellow_dwarf_crust")
+                    .mapColor(MapColor.COLOR_ORANGE)
+                    .sound(SoundType.STONE)
+                    .strength(3.0F, 6.0F)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> 3)));
+
+    public static final RegistryObject<Block, Block> YELLOW_DWARF_PLASMA = registerBlock("yellow_dwarf_plasma",
+            () -> new Block(blockBuilder("yellow_dwarf_plasma")
+                    .mapColor(MapColor.COLOR_YELLOW)
+                    .sound(SoundType.STONE)
+                    .strength(3.0F, 6.0F)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> 15)));
+
     private static BlockBehaviour.Properties blockBuilder(String name) {
         return BlockBehaviour.Properties.of()
                 .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name)));

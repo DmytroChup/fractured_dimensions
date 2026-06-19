@@ -21,6 +21,8 @@
   "block.fractured_dimensions.anchor_controller": "Контроллер якоря",
   "block.fractured_dimensions.energy_port": "Энергетический порт",
   "block.fractured_dimensions.return_portal": "Портал возвращения",
+  "block.fractured_dimensions.yellow_dwarf_crust": "Кора желтого карлика",
+  "block.fractured_dimensions.yellow_dwarf_plasma": "Плазма желтого карлика",
 
   "item.fractured_dimensions.shard_receptacle": "Хранилище осколков",
   "tooltip.fractured_dimensions.shard_receptacle.empty": "Пусто",

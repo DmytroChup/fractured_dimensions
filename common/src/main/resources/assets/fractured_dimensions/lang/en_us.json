@@ -21,6 +21,8 @@
   "block.fractured_dimensions.anchor_controller": "Anchor Controller",
   "block.fractured_dimensions.energy_port": "Energy Port",
   "block.fractured_dimensions.return_portal": "Return Portal",
+  "block.fractured_dimensions.yellow_dwarf_crust": "Yellow Dwarf Crust",
+  "block.fractured_dimensions.yellow_dwarf_plasma": "Yellow Dwarf Plasma",
 
   "item.fractured_dimensions.shard_receptacle": "Shard Receptacle",
   "tooltip.fractured_dimensions.shard_receptacle.empty": "Empty",
