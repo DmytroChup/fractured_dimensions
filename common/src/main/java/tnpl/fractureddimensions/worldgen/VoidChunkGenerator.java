@@ -73,9 +73,13 @@ public class VoidChunkGenerator extends ChunkGenerator {
             int baseRadius = data.getBaseRadius();
             int heightLimit = baseRadius / 3;
             
-            BlockState stone = Blocks.STONE.defaultBlockState();
-            BlockState dirt = Blocks.DIRT.defaultBlockState();
-            BlockState grass = Blocks.GRASS_BLOCK.defaultBlockState();
+            BlockState core = Blocks.STONE.defaultBlockState();
+            BlockState surface = Blocks.DIRT.defaultBlockState();
+
+            if (data.type() == 0 && data.variant() == 0) {
+                surface = ModBlocks.YELLOW_DWARF_CRUST.get().defaultBlockState();
+                core = ModBlocks.YELLOW_DWARF_PLASMA.get().defaultBlockState();
+            }
 
             for (int lx = 0; lx < 16; lx++) {
                 for (int lz = 0; lz < 16; lz++) {
@@ -102,16 +106,16 @@ public class VoidChunkGenerator extends ChunkGenerator {
                     for (int y = bottomY; y <= topY; y++) {
                         if (y >= -64 && y < 320) {
                             BlockPos localPos = new BlockPos(lx, y, lz);
-                            if (y == topY) {
-                                chunk.setBlockState(localPos, grass, 0);
-                                if (relX == 5 && relZ == 0 && y + 1 < 320) {
+                            
+                            if (y >= topY - 3) {
+                                chunk.setBlockState(localPos, surface, 0);
+                                
+                                if (y == topY && relX == 5 && relZ == 0 && y + 1 < 320) {
                                     BlockPos portalPos = new BlockPos(lx, y + 1, lz);
                                     chunk.setBlockState(portalPos, ModBlocks.RETURN_PORTAL.get().defaultBlockState(), 0);
                                 }
-                            } else if (y >= topY - 3) {
-                                chunk.setBlockState(localPos, dirt, 0);
                             } else {
-                                chunk.setBlockState(localPos, stone, 0);
+                                chunk.setBlockState(localPos, core, 0);
                             }
                         }
                     }
