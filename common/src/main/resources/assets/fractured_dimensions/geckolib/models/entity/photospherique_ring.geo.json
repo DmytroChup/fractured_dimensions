@@ -1,0 +1,29 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 32,
+				"texture_height": 32,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "root",
+					"pivot": [-0.44316, 4.17851, -0.0573]
+				},
+				{
+					"name": "ring_1",
+					"parent": "root",
+					"pivot": [-0.44316, 4.17851, -0.0573],
+					"cubes": [
+						{"origin": [-1.4, 3.71788, -0.63604], "size": [2, 1, 1], "pivot": [-0.51135, 4.21788, -0.13604], "rotation": [0, -45, 30], "uv": [24, 2]}
+					]
+				}
+			]
+		}
+	]
+}
