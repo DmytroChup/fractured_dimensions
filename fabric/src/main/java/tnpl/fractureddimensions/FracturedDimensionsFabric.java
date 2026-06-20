@@ -14,12 +14,16 @@ import tnpl.fractureddimensions.command.ModCommands;
 import tnpl.fractureddimensions.energy.FabricCoreEnergyWrapper;
 import tnpl.fractureddimensions.energy.FabricPortEnergyWrapper;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import tnpl.fractureddimensions.entity.PhotospheriqueEntity;
+import tnpl.fractureddimensions.registry.ModEntityTypes;
 
 public class FracturedDimensionsFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
         CommonClass.init();
+        FabricDefaultAttributeRegistry.register(ModEntityTypes.PHOTOSPHERIQUE.get(), PhotospheriqueEntity.createAttributes());
 
         CommandRegistrationCallback.EVENT.register((
                 dispatcher,
