@@ -1,0 +1,23 @@
+{
+  "photospherique_shoot": {
+    "category": "hostile",
+    "subtitle": "subtitles.fractured_dimensions.photospherique.shoot",
+    "sounds": [
+      "fractured_dimensions:entity/photospherique/photospherique_shoot"
+    ]
+  },
+  "photospherique_charge": {
+    "category": "hostile",
+    "subtitle": "subtitles.fractured_dimensions.photospherique.charge",
+    "sounds": [
+      "fractured_dimensions:entity/photospherique/photospherique_charge"
+    ]
+  },
+  "photospherique_supernova": {
+    "category": "hostile",
+    "subtitle": "subtitles.fractured_dimensions.photospherique.supernova",
+    "sounds": [
+      "fractured_dimensions:entity/photospherique/photospherique_supernova"
+    ]
+  }
+}

@@ -47,5 +47,10 @@
   "gui.fractured_dimensions.timer.island_time": "Остров: %s | Время: %s",
   "gui.fractured_dimensions.timer.critical": "КРИТИЧЕСКИЙ РАСПАД: %s с",
   "gui.fractured_dimensions.timer.island_destroyed": "Остров: %s | УНИЧТОЖЕН",
-  "message.fractured_dimensions.return_portal.used": "Вы безопасно вернулись в обычный мир."
+  "message.fractured_dimensions.return_portal.used": "Вы безопасно вернулись в обычный мир.",
+
+  "entity.fractured_dimensions.photospherique": "Фотосферик",
+  "subtitles.fractured_dimensions.photospherique.shoot": "Фотосферик стреляет",
+  "subtitles.fractured_dimensions.photospherique.charge": "Фотосферик накапливает энергию",
+  "subtitles.fractured_dimensions.photospherique.supernova": "Взрыв суперновы"
 }

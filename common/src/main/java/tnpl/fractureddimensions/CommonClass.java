@@ -13,5 +13,6 @@ public class CommonClass {
         ModDataComponents.init();
         ModMenus.init();
         ModDimensions.init();
+        ModSounds.init();
     }
 }

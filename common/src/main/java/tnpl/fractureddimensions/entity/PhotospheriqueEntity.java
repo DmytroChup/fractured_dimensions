@@ -11,7 +11,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -23,7 +22,6 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.animal.golem.IronGolem;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
@@ -34,6 +32,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import tnpl.fractureddimensions.entity.projectile.PhotospheriqueRingEntity;
 import tnpl.fractureddimensions.registry.ModEntityTypes;
+import tnpl.fractureddimensions.registry.ModSounds;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -113,9 +112,6 @@ public class PhotospheriqueEntity extends Monster implements GeoEntity, RangedAt
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
-
-        // TEMPORARY FOR TESTING
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
     }
 
     @Override
@@ -135,7 +131,7 @@ public class PhotospheriqueEntity extends Monster implements GeoEntity, RangedAt
         if (!this.isSilent()) {
             this.level().playSound(
                     null, this.getX(), this.getY(), this.getZ(),
-                    SoundEvents.AMETHYST_BLOCK_RESONATE,
+                    ModSounds.PHOTOSPHERIQUE_SHOOT.get(),
                     this.getSoundSource(), 2.0F,
                     (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F
             );
@@ -199,13 +195,13 @@ public class PhotospheriqueEntity extends Monster implements GeoEntity, RangedAt
 
         @Override
         public void start() {
-            this.tickCount = 80; // 60 ticks charge (3 sec) + 20 ticks release (1 sec)
+            this.tickCount = 60; // 60 ticks charge (3 sec)
             this.mob.setSupernovaState(1);
             this.mob.getNavigation().stop();
             
             if (!this.mob.isSilent()) {
                 this.mob.level().playSound(null, this.mob.getX(), this.mob.getY(), this.mob.getZ(), 
-                    SoundEvents.BEACON_ACTIVATE, this.mob.getSoundSource(), 2.0F, 0.5F);
+                    ModSounds.PHOTOSPHERIQUE_CHARGE.get(), this.mob.getSoundSource(), 2.0F, 1.0F);
             }
         }
 
@@ -228,7 +224,7 @@ public class PhotospheriqueEntity extends Monster implements GeoEntity, RangedAt
                 
                 if (!this.mob.isSilent()) {
                     this.mob.level().playSound(null, this.mob.getX(), this.mob.getY(), this.mob.getZ(), 
-                        SoundEvents.WARDEN_SONIC_BOOM, this.mob.getSoundSource(), 3.0F, 1.0F);
+                       ModSounds.PHOTOSPHERIQUE_SUPERNOVA.get(), this.mob.getSoundSource(), 3.0F, 1.0F);
                 }
 
                 if (!this.mob.level().isClientSide()) {

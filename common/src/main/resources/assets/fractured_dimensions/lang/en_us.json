@@ -47,5 +47,10 @@
   "gui.fractured_dimensions.timer.island_time": "Island: %s | Time: %s",
   "gui.fractured_dimensions.timer.critical": "CRITICAL COLLAPSE: %s s",
   "gui.fractured_dimensions.timer.island_destroyed": "Island: %s | DESTROYED",
-  "message.fractured_dimensions.return_portal.used": "You have safely returned to the overworld."
+  "message.fractured_dimensions.return_portal.used": "You have safely returned to the overworld.",
+
+  "entity.fractured_dimensions.photospherique": "Photospherique",
+  "subtitles.fractured_dimensions.photospherique.shoot": "Photospherique shoots",
+  "subtitles.fractured_dimensions.photospherique.charge": "Photospherique charges energy",
+  "subtitles.fractured_dimensions.photospherique.supernova": "Supernova explosion"
 }
