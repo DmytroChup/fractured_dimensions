@@ -6,13 +6,17 @@ import com.geckolib.animatable.manager.AnimatableManager;
 import com.geckolib.animation.AnimationController;
 import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -26,16 +30,20 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import tnpl.fractureddimensions.component.DimensionData;
 import tnpl.fractureddimensions.entity.projectile.PhotospheriqueRingEntity;
 import tnpl.fractureddimensions.registry.ModEntityTypes;
 import tnpl.fractureddimensions.registry.ModSounds;
+import tnpl.fractureddimensions.worldgen.IslandManager;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 
 public class PhotospheriqueEntity extends Monster implements GeoEntity, RangedAttackMob {
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
@@ -275,5 +283,36 @@ public class PhotospheriqueEntity extends Monster implements GeoEntity, RangedAt
             this.mob.setSupernovaState(0);
             this.mob.supernovaCooldown = 300; // 15 seconds cooldown
         }
+    }
+
+    public static boolean checkPhotospheriqueSpawnRules(
+            EntityType<PhotospheriqueEntity> type,
+            ServerLevelAccessor levelAccessor,
+            EntitySpawnReason spawnReason,
+            BlockPos pos,
+            RandomSource random
+    ) {
+        if (levelAccessor instanceof ServerLevel serverLevel) {
+            IslandManager manager = IslandManager.getVoidInstance();
+            if (manager == null) manager = IslandManager.get(serverLevel);
+
+            Map.Entry<BlockPos, IslandManager.ActiveIsland> island = manager.findIslandAt(pos.getX(), pos.getZ());
+            if (island != null) {
+                DimensionData data = island.getValue().data();
+                if (data.type() == 0 && data.variant() == 0) {
+                    
+                    AABB box = new AABB(pos).inflate(64.0);
+                    List<PhotospheriqueEntity> nearby = levelAccessor.getEntitiesOfClass(PhotospheriqueEntity.class, box);
+                    
+                    if (nearby.size() >= 3) {
+                        return false; 
+                    }
+
+                    return levelAccessor.getDifficulty() != Difficulty.PEACEFUL &&
+                           checkMobSpawnRules(type, levelAccessor, spawnReason, pos, random);
+                }
+            }
+        }
+        return false;
     }
 }

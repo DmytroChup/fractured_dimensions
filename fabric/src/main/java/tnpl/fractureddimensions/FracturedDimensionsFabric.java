@@ -7,7 +7,10 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.Heightmap;
 import team.reborn.energy.api.EnergyStorage;
 import tnpl.fractureddimensions.block.EnergyPortBlock;
 import tnpl.fractureddimensions.command.ModCommands;
@@ -24,6 +27,13 @@ public class FracturedDimensionsFabric implements ModInitializer {
     public void onInitialize() {
         CommonClass.init();
         FabricDefaultAttributeRegistry.register(ModEntityTypes.PHOTOSPHERIQUE.get(), PhotospheriqueEntity.createAttributes());
+
+        SpawnPlacements.register(
+                ModEntityTypes.PHOTOSPHERIQUE.get(),
+                SpawnPlacementTypes.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                PhotospheriqueEntity::checkPhotospheriqueSpawnRules
+        );
 
         CommandRegistrationCallback.EVENT.register((
                 dispatcher,
