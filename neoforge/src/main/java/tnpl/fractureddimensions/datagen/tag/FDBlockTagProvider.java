@@ -24,17 +24,23 @@ public class FDBlockTagProvider extends BlockTagsProvider {
                         ModBlocks.SPATIAL_FRAME.get(),
                         ModBlocks.OBSERVER_PLATFORM.get(),
                         ModBlocks.ENERGY_CORE.get(),
-                        ModBlocks.ANCHOR_CONTROLLER.get());
+                        ModBlocks.ANCHOR_CONTROLLER.get(),
+                        ModBlocks.ENERGY_PORT.get(),
+                        ModBlocks.DYSON_HULL.get(),
+                        ModBlocks.DYSON_CORE.get());
 
         this.tag(BlockTags.NEEDS_IRON_TOOL)
                 .add(ModBlocks.FALLEN_METEORITE.get(),
                         ModBlocks.SPATIAL_FRAME.get(),
                         ModBlocks.OBSERVER_PLATFORM.get(),
                         ModBlocks.ENERGY_CORE.get(),
-                        ModBlocks.ANCHOR_CONTROLLER.get());
+                        ModBlocks.ANCHOR_CONTROLLER.get(),
+                        ModBlocks.ENERGY_PORT.get());
 
         this.tag(BlockTags.NEEDS_DIAMOND_TOOL)
                 .add(ModBlocks.AZURITE_ORE.get(),
-                        ModBlocks.DEEPSLATE_AZURITE_ORE.get());
+                        ModBlocks.DEEPSLATE_AZURITE_ORE.get(),
+                        ModBlocks.DYSON_HULL.get(),
+                        ModBlocks.DYSON_CORE.get());
     }
 }

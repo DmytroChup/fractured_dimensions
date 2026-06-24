@@ -6,6 +6,9 @@
     "fractured_dimensions:spatial_frame",
     "fractured_dimensions:observer_platform",
     "fractured_dimensions:energy_core",
-    "fractured_dimensions:anchor_controller"
+    "fractured_dimensions:anchor_controller",
+    "fractured_dimensions:energy_port",
+    "fractured_dimensions:dyson_hull",
+    "fractured_dimensions:dyson_core"
   ]
 }

@@ -29,6 +29,11 @@ public class FDBlockLootProvider extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.OBSERVER_PLATFORM.get());
         this.dropSelf(ModBlocks.ENERGY_CORE.get());
         this.dropSelf(ModBlocks.ANCHOR_CONTROLLER.get());
+        this.dropSelf(ModBlocks.ENERGY_PORT.get());
+        this.dropSelf(ModBlocks.YELLOW_DWARF_CRUST.get());
+        this.dropSelf(ModBlocks.YELLOW_DWARF_PLASMA.get());
+        this.dropSelf(ModBlocks.DYSON_HULL.get());
+        this.dropSelf(ModBlocks.DYSON_CORE.get());
 
         this.add(ModBlocks.FALLEN_METEORITE.get(), block -> LootTable.lootTable()
                 .withPool(LootPool.lootPool()
