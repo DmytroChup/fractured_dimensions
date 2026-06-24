@@ -101,6 +101,21 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .lightLevel(state -> 15)));
 
+    public static final RegistryObject<Block, Block> DYSON_HULL = registerBlock("dyson_hull",
+            () -> new Block(blockBuilder("dyson_hull")
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .sound(SoundType.NETHERITE_BLOCK)
+                    .strength(5.0F, 1200.0F)
+                    .requiresCorrectToolForDrops()));
+
+    public static final RegistryObject<Block, Block> DYSON_CORE = registerBlock("dyson_core",
+            () -> new Block(blockBuilder("dyson_core")
+                    .mapColor(MapColor.COLOR_CYAN)
+                    .sound(SoundType.LODESTONE)
+                    .strength(6.0F, 10.0F)
+                    .lightLevel(state -> 7)
+                    .requiresCorrectToolForDrops()));
+
     private static BlockBehaviour.Properties blockBuilder(String name) {
         return BlockBehaviour.Properties.of()
                 .setId(ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name)));

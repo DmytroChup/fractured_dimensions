@@ -23,6 +23,8 @@
   "block.fractured_dimensions.return_portal": "Return Portal",
   "block.fractured_dimensions.yellow_dwarf_crust": "Yellow Dwarf Crust",
   "block.fractured_dimensions.yellow_dwarf_plasma": "Yellow Dwarf Plasma",
+  "block.fractured_dimensions.dyson_hull": "Dyson Sphere Hull",
+  "block.fractured_dimensions.dyson_core": "Dyson Sphere Core",
 
   "item.fractured_dimensions.shard_receptacle": "Shard Receptacle",
   "tooltip.fractured_dimensions.shard_receptacle.empty": "Empty",
