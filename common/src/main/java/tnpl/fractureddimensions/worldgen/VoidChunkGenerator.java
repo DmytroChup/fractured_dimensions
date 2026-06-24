@@ -103,19 +103,93 @@ public class VoidChunkGenerator extends ChunkGenerator {
                     double bottomNoise = noise.getValue(globalX * 0.03, -100, globalZ * 0.03);
                     int bottomY = center.getY() + (int) (-heightLimit * depthFactor * (0.6 + (bottomNoise + 1.0) / 2.0 * 0.4));
 
-                    for (int y = bottomY; y <= topY; y++) {
+                    int originalTopY = topY;
+                    boolean isYellowDwarf = (data.type() == 0 && data.variant() == 0);
+                    
+                    int debrisRadius = 0;
+                    int debrisCenterX = 0;
+                    int debrisCenterZ = 0;
+                    
+                    if (isYellowDwarf) {
+                        int gridSize = (int) Math.max(16, baseRadius * 0.4);
+                        int cellX = Math.floorDiv(globalX, gridSize);
+                        int cellZ = Math.floorDiv(globalZ, gridSize);
+                        
+                        for (int dx = -1; dx <= 1; dx++) {
+                            for (int dz = -1; dz <= 1; dz++) {
+                                int cx = cellX + dx;
+                                int cz = cellZ + dz;
+                                
+                                long cellSeed = seed ^ (cx * 341873128712L + cz * 132897987541L);
+                                RandomSource cellRand = RandomSource.create(cellSeed);
+                                
+                                // 40% chance for a huge 64x64 cell = strictly 3–4 debris pieces per island
+                                if (cellRand.nextFloat() < 0.4f) {
+                                    int centerX = cx * gridSize + cellRand.nextInt(gridSize);
+                                    int centerZ = cz * gridSize + cellRand.nextInt(gridSize);
+                                    
+                                    double dCenterX = centerX - center.getX();
+                                    double dCenterZ = centerZ - center.getZ();
+                                    double islandDist = Math.sqrt(dCenterX * dCenterX + dCenterZ * dCenterZ);
+                                    
+                                    if (islandDist > baseRadius * 0.50 && islandDist < baseRadius * 0.85) {
+                                        // Fragment radius: 4 to 7 blocks
+                                        int rad = 4 + cellRand.nextInt(4); 
+                                        double distToCenter = Math.sqrt(Math.pow(globalX - centerX, 2) + Math.pow(globalZ - centerZ, 2));
+                                        
+                                        if (distToCenter <= rad) {
+                                            debrisRadius = rad;
+                                            debrisCenterX = centerX;
+                                            debrisCenterZ = centerZ;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    int maxRenderY = originalTopY + debrisRadius;
+
+                    for (int y = bottomY; y <= Math.max(topY, maxRenderY); y++) {
                         if (y >= -64 && y < 320) {
                             BlockPos localPos = new BlockPos(lx, y, lz);
                             
-                            if (y >= topY - 3) {
-                                chunk.setBlockState(localPos, surface, 0);
+                            boolean placedDebris = false;
+
+                            // Debris Generation
+                            if (debrisRadius > 0 && y >= originalTopY - debrisRadius) {
+                                double dx = globalX - debrisCenterX;
+                                double dy = y - originalTopY;
+                                double dz = globalZ - debrisCenterZ;
+                                double dist3D = Math.sqrt(dx*dx + dy*dy + dz*dz);
+
+                                double shapeNoise = noise.getValue(globalX * 0.2, y * 0.2, globalZ * 0.2);
                                 
-                                if (y == topY && relX == 5 && relZ == 0 && y + 1 < 320) {
-                                    BlockPos portalPos = new BlockPos(lx, y + 1, lz);
-                                    chunk.setBlockState(portalPos, ModBlocks.RETURN_PORTAL.get().defaultBlockState(), 0);
+                                if (dist3D + shapeNoise * 2.5 <= debrisRadius) {
+                                    placedDebris = true;
+
+                                    long blockSeed = seed ^ (globalX * 73128L + y * 13289L + globalZ * 97987L);
+                                    RandomSource blockRand = RandomSource.create(blockSeed);
+
+                                    if (dist3D < debrisRadius * 0.5 && blockRand.nextFloat() < 0.10f) {
+                                        chunk.setBlockState(localPos, ModBlocks.DYSON_CORE.get().defaultBlockState(), 0);
+                                    } else {
+                                        chunk.setBlockState(localPos, ModBlocks.DYSON_HULL.get().defaultBlockState(), 0);
+                                    }
                                 }
-                            } else {
-                                chunk.setBlockState(localPos, core, 0);
+                            }
+
+                            if (!placedDebris && y <= originalTopY) {
+                                if (y >= originalTopY - 3) {
+                                    chunk.setBlockState(localPos, surface, 0);
+                                    
+                                    if (y == originalTopY && relX == 5 && relZ == 0 && y + 1 < 320) {
+                                        BlockPos portalPos = new BlockPos(lx, y + 1, lz);
+                                        chunk.setBlockState(portalPos, ModBlocks.RETURN_PORTAL.get().defaultBlockState(), 0);
+                                    }
+                                } else {
+                                    chunk.setBlockState(localPos, core, 0);
+                                }
                             }
                         }
                     }
