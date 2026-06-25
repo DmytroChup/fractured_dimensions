@@ -12,13 +12,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class PhotospheriqueRingEntity extends Projectile implements GeoEntity {
+public class PhotospheriqueRingEntity extends BaseProjectile implements GeoEntity {
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     private int life = 0;
@@ -39,15 +37,15 @@ public class PhotospheriqueRingEntity extends Projectile implements GeoEntity {
 
         if (this.level().isClientSide()) {
             this.level().addParticle(net.minecraft.core.particles.ParticleTypes.END_ROD, 
-                    this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 
-                    0.0D, 0.0D, 0.0D);
+                    this.getRandomX(0.5), this.getRandomY(), this.getRandomZ(0.5),
+                    0.0, 0.0, 0.0);
         } else {
             if (this.life > 40) {
                 if (this.getOwner() != null && this.getOwner().isAlive()) {
                     Vec3 targetPos = this.getOwner().position().add(0, this.getOwner().getBbHeight() * 0.3F, 0);
                     Vec3 vec3 = targetPos.subtract(this.position());
-                    this.setDeltaMovement(vec3.normalize().scale(0.8D));
-                    if (vec3.length() < 1.5D) {
+                    this.setDeltaMovement(vec3.normalize().scale(0.8));
+                    if (vec3.length() < 1.5) {
                         this.discard();
                     }
                 } else {
@@ -55,18 +53,12 @@ public class PhotospheriqueRingEntity extends Projectile implements GeoEntity {
                 }
             } else {
                 if (this.getDeltaMovement().lengthSqr() < 0.1) {
-                    this.setDeltaMovement(this.getDeltaMovement().normalize().scale(1.0D));
+                    this.setDeltaMovement(this.getDeltaMovement().normalize().scale(1.0));
                 }
             }
         }
 
-        HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
-        if (hitresult.getType() != HitResult.Type.MISS) {
-            this.hitTargetOrDeflectSelf(hitresult);
-        }
-        
-        Vec3 vec3 = this.getDeltaMovement();
-        this.setPos(this.getX() + vec3.x, this.getY() + vec3.y, this.getZ() + vec3.z);
+        this.applyMovementAndCollision();
     }
 
     @Override

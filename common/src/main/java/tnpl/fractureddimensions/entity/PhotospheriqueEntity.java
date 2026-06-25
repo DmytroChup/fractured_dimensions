@@ -31,11 +31,13 @@ import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import tnpl.fractureddimensions.component.DimensionData;
+import tnpl.fractureddimensions.entity.projectile.BaseProjectile;
 import tnpl.fractureddimensions.entity.projectile.PhotospheriqueRingEntity;
 import tnpl.fractureddimensions.registry.ModEntityTypes;
 import tnpl.fractureddimensions.registry.ModSounds;
@@ -127,14 +129,7 @@ public class PhotospheriqueEntity extends Monster implements GeoEntity, RangedAt
         if (this.getSupernovaState() != 0) return;
 
         PhotospheriqueRingEntity ring = new PhotospheriqueRingEntity(ModEntityTypes.PHOTOSPHERIQUE_RING.get(), this.level());
-        ring.setOwner(this);
-        ring.setPos(this.getX(), this.getY() + this.getBbHeight() / 2.0F, this.getZ());
-        
-        double xd = target.getX() - this.getX();
-        double yd = target.getY(0.3333333333333333) - ring.getY();
-        double zd = target.getZ() - this.getZ();
-        
-        ring.shoot(xd, yd, zd, 1.0F, 0.0F);
+        BaseProjectile.setupAndShoot(ring, this, target, 1.0F, 0.0F);
 
         if (!this.isSilent()) {
             this.level().playSound(
@@ -315,4 +310,13 @@ public class PhotospheriqueEntity extends Monster implements GeoEntity, RangedAt
         }
         return false;
     }
+
+    @Override
+    protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+    }
+
 }
