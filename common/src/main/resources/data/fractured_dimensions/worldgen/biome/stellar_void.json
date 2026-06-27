@@ -40,7 +40,13 @@
         "type": "fractured_dimensions:photospherique",
         "minCount": 1,
         "maxCount": 2,
-        "weight": 100
+        "weight": 55
+      },
+      {
+        "type": "fractured_dimensions:dyson_drone",
+        "minCount": 1,
+        "maxCount": 2,
+        "weight": 45
       }
     ],
     "underground_water_creature": [],

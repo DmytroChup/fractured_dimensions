@@ -12,6 +12,7 @@ import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import tnpl.fractureddimensions.command.ModCommands;
 import tnpl.fractureddimensions.events.client.NeoForgeClientModEvents;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import tnpl.fractureddimensions.entity.DysonDroneEntity;
 import tnpl.fractureddimensions.entity.PhotospheriqueEntity;
 import tnpl.fractureddimensions.registry.ModEntityTypes;
 
@@ -24,16 +25,27 @@ public class FracturedDimensionsNeoForge {
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent event)
                 -> ModCommands.register(event.getDispatcher()));
 
-        eventBus.addListener((EntityAttributeCreationEvent event)
-                -> event.put(ModEntityTypes.PHOTOSPHERIQUE.get(), PhotospheriqueEntity.createAttributes().build()));
+        eventBus.addListener((EntityAttributeCreationEvent event) -> {
+            event.put(ModEntityTypes.PHOTOSPHERIQUE.get(), PhotospheriqueEntity.createAttributes().build());
+            event.put(ModEntityTypes.DYSON_DRONE.get(), DysonDroneEntity.createAttributes().build());
+        });
 
-        eventBus.addListener((RegisterSpawnPlacementsEvent event) -> event.register(
+        eventBus.addListener((RegisterSpawnPlacementsEvent event) -> {
+            event.register(
                 ModEntityTypes.PHOTOSPHERIQUE.get(),
-                SpawnPlacementTypes.ON_GROUND,
+                SpawnPlacementTypes.NO_RESTRICTIONS,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 PhotospheriqueEntity::checkPhotospheriqueSpawnRules,
                 RegisterSpawnPlacementsEvent.Operation.REPLACE
-        ));
+            );
+            event.register(
+                ModEntityTypes.DYSON_DRONE.get(),
+                SpawnPlacementTypes.NO_RESTRICTIONS,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                DysonDroneEntity::checkDroneSpawnRules,
+                RegisterSpawnPlacementsEvent.Operation.REPLACE
+            );
+        });
 
         if (FMLEnvironment.getDist() == Dist.CLIENT) {
             eventBus.addListener(NeoForgeClientModEvents::registerRenderers);

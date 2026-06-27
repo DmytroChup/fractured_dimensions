@@ -18,6 +18,7 @@ import tnpl.fractureddimensions.energy.FabricCoreEnergyWrapper;
 import tnpl.fractureddimensions.energy.FabricPortEnergyWrapper;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import tnpl.fractureddimensions.entity.DysonDroneEntity;
 import tnpl.fractureddimensions.entity.PhotospheriqueEntity;
 import tnpl.fractureddimensions.registry.ModEntityTypes;
 
@@ -27,12 +28,19 @@ public class FracturedDimensionsFabric implements ModInitializer {
     public void onInitialize() {
         CommonClass.init();
         FabricDefaultAttributeRegistry.register(ModEntityTypes.PHOTOSPHERIQUE.get(), PhotospheriqueEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ModEntityTypes.DYSON_DRONE.get(), DysonDroneEntity.createAttributes());
 
         SpawnPlacements.register(
                 ModEntityTypes.PHOTOSPHERIQUE.get(),
-                SpawnPlacementTypes.ON_GROUND,
+                SpawnPlacementTypes.NO_RESTRICTIONS,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 PhotospheriqueEntity::checkPhotospheriqueSpawnRules
+        );
+        SpawnPlacements.register(
+                ModEntityTypes.DYSON_DRONE.get(),
+                SpawnPlacementTypes.NO_RESTRICTIONS,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                DysonDroneEntity::checkDroneSpawnRules
         );
 
         CommandRegistrationCallback.EVENT.register((
