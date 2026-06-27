@@ -1,0 +1,105 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.dyson_drone_v2",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 3,
+				"visible_bounds_offset": [0, 1.5, 0]
+			},
+			"bones": [
+				{
+					"name": "root",
+					"pivot": [0, 8, 0]
+				},
+				{
+					"name": "body",
+					"parent": "root",
+					"pivot": [0, 8, 0],
+					"cubes": [
+						{"origin": [-4, 6, -4], "size": [8, 4, 8], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "eye",
+					"parent": "body",
+					"pivot": [0, 8, -4],
+					"cubes": [
+						{"origin": [-1.5, 6.5, -4.5], "size": [3, 3, 1], "uv": [16, 32]}
+					]
+				},
+				{
+					"name": "arm_fl",
+					"parent": "body",
+					"pivot": [-4, 8, -4],
+					"cubes": [
+						{"origin": [-8, 7, -8], "size": [4, 2, 4], "uv": [0, 26]}
+					]
+				},
+				{
+					"name": "rotor_fl",
+					"parent": "arm_fl",
+					"pivot": [-6, 9, -6],
+					"cubes": [
+						{"origin": [-7, 9, -9], "size": [2, 1, 6], "uv": [0, 12]},
+						{"origin": [-9, 9, -7], "size": [6, 1, 2], "uv": [32, 15]}
+					]
+				},
+				{
+					"name": "arm_fr",
+					"parent": "body",
+					"pivot": [4, 8, -4],
+					"cubes": [
+						{"origin": [4, 7, -8], "size": [4, 2, 4], "uv": [16, 26]}
+					]
+				},
+				{
+					"name": "rotor_fr",
+					"parent": "arm_fr",
+					"pivot": [6, 9, -6],
+					"cubes": [
+						{"origin": [5, 9, -9], "size": [2, 1, 6], "uv": [16, 12]},
+						{"origin": [3, 9, -7], "size": [6, 1, 2], "uv": [32, 6]}
+					]
+				},
+				{
+					"name": "arm_bl",
+					"parent": "body",
+					"pivot": [-4, 8, 4],
+					"cubes": [
+						{"origin": [-8, 7, 4], "size": [4, 2, 4], "uv": [0, 32]}
+					]
+				},
+				{
+					"name": "rotor_bl",
+					"parent": "arm_bl",
+					"pivot": [-6, 9, 6],
+					"cubes": [
+						{"origin": [-7, 9, 3], "size": [2, 1, 6], "uv": [0, 19]},
+						{"origin": [-9, 9, 5], "size": [6, 1, 2], "uv": [32, 9]}
+					]
+				},
+				{
+					"name": "arm_br",
+					"parent": "body",
+					"pivot": [4, 8, 4],
+					"cubes": [
+						{"origin": [4, 7, 4], "size": [4, 2, 4], "uv": [32, 0]}
+					]
+				},
+				{
+					"name": "rotor_br",
+					"parent": "arm_br",
+					"pivot": [6, 9, 6],
+					"cubes": [
+						{"origin": [5, 9, 3], "size": [2, 1, 6], "uv": [16, 19]},
+						{"origin": [3, 9, 5], "size": [6, 1, 2], "uv": [32, 12]}
+					]
+				}
+			]
+		}
+	]
+}

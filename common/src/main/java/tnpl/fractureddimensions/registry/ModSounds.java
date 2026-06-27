@@ -28,6 +28,12 @@ public class ModSounds {
                     Identifier.fromNamespaceAndPath(Constants.MOD_ID, "photospherique_supernova")
             ));
 
+    public static final RegistryObject<SoundEvent, SoundEvent> DYSON_DRONE_SHOOT =
+            SOUNDS.register("dyson_drone_shoot",
+            () -> SoundEvent.createVariableRangeEvent(
+                    Identifier.fromNamespaceAndPath(Constants.MOD_ID, "dyson_drone_shoot")
+            ));
+
     public static void init() {
     }
 }

@@ -52,6 +52,8 @@
   "message.fractured_dimensions.return_portal.used": "You have safely returned to the overworld.",
 
   "entity.fractured_dimensions.photospherique": "Photospherique",
+  "entity.fractured_dimensions.photospherique_ring": "Plasma Ring",
+  "entity.fractured_dimensions.dyson_drone": "Dyson Drone",
   "subtitles.fractured_dimensions.photospherique.shoot": "Photospherique shoots",
   "subtitles.fractured_dimensions.photospherique.charge": "Photospherique charges energy",
   "subtitles.fractured_dimensions.photospherique.supernova": "Supernova explosion"

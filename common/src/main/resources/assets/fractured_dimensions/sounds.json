@@ -19,5 +19,15 @@
     "sounds": [
       "fractured_dimensions:entity/photospherique/photospherique_supernova"
     ]
+  },
+  "dyson_drone_shoot": {
+    "category": "hostile",
+    "subtitle": "subtitles.fractured_dimensions.dyson_drone.shoot",
+    "sounds": [
+      "fractured_dimensions:entity/dyson_drone/dyson_drone_shoot_1",
+      "fractured_dimensions:entity/dyson_drone/dyson_drone_shoot_2",
+      "fractured_dimensions:entity/dyson_drone/dyson_drone_shoot_3",
+      "fractured_dimensions:entity/dyson_drone/dyson_drone_shoot_4"
+    ]
   }
 }

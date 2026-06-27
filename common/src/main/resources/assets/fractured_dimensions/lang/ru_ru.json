@@ -52,6 +52,8 @@
   "message.fractured_dimensions.return_portal.used": "Вы безопасно вернулись в обычный мир.",
 
   "entity.fractured_dimensions.photospherique": "Фотосферик",
+  "entity.fractured_dimensions.photospherique_ring": "Плазменное кольцо",
+  "entity.fractured_dimensions.dyson_drone": "Дрон Дайсона",
   "subtitles.fractured_dimensions.photospherique.shoot": "Фотосферик стреляет",
   "subtitles.fractured_dimensions.photospherique.charge": "Фотосферик накапливает энергию",
   "subtitles.fractured_dimensions.photospherique.supernova": "Взрыв суперновы"

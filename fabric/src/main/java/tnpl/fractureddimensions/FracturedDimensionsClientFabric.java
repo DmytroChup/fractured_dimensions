@@ -10,6 +10,7 @@ import tnpl.fractureddimensions.registry.ModBlockEntities;
 import tnpl.fractureddimensions.registry.ModMenus;
 import com.geckolib.renderer.GeoEntityRenderer;
 import tnpl.fractureddimensions.registry.ModEntityTypes;
+import tnpl.fractureddimensions.client.render.entity.EmptyRenderer;
 
 public class FracturedDimensionsClientFabric implements ClientModInitializer {
     @Override
@@ -19,5 +20,7 @@ public class FracturedDimensionsClientFabric implements ClientModInitializer {
 
         EntityRenderers.register(ModEntityTypes.PHOTOSPHERIQUE.get(), context -> new GeoEntityRenderer<>(context, ModEntityTypes.PHOTOSPHERIQUE.get()));
         EntityRenderers.register(ModEntityTypes.PHOTOSPHERIQUE_RING.get(), context -> new GeoEntityRenderer<>(context, ModEntityTypes.PHOTOSPHERIQUE_RING.get()));
+        EntityRenderers.register(ModEntityTypes.DYSON_DRONE.get(), context -> new GeoEntityRenderer<>(context, ModEntityTypes.DYSON_DRONE.get()));
+        EntityRenderers.register(ModEntityTypes.DYSON_PROJECTILE.get(), EmptyRenderer::new);
     }
 }
