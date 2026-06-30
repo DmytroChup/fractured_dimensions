@@ -74,7 +74,9 @@ public class IslandDecayHandler {
                 int bottomY = Math.max(-64, center.getY() + (int) (-heightLimit * depthFactor * (0.6 + (bottomNoise + 1.0) / 2.0 * 0.4)));
 
                 boolean columnHadBlocks = false;
-                for (int y = topY; y >= bottomY; y--) {
+
+                int sweepTopY = Math.min(319, topY + 100);
+                for (int y = sweepTopY; y >= bottomY; y--) {
                     BlockPos pos = new BlockPos(globalX & 15, y, globalZ & 15);
                     BlockState state = chunk.getBlockState(pos);
 
