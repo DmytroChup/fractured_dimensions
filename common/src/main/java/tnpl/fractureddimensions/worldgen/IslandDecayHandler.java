@@ -31,13 +31,17 @@ public class IslandDecayHandler {
 
             int baseRadius = island.data().getBaseRadius();
             long seed = island.data().name().hashCode();
+            long decayDurationTicks = (long) (island.data().survivalTime() * 60 * 20 * 0.9) + 200;
+            double area = Math.PI * baseRadius * baseRadius;
+            
+            int desiredColumnsPerTick = (int) ((area * 0.6) / decayDurationTicks);
+            int columnsPerTick = Math.clamp(desiredColumnsPerTick, 2, 20);
+            int columnsDestroyed = 0;
+
             RandomSource noiseRandom = RandomSource.create(seed);
             SimplexNoise noise = new SimplexNoise(noiseRandom);
 
             double stableRatio = 1.0 - progress;
-
-            int columnsPerTick = Math.max(10, baseRadius / 15);
-            int columnsDestroyed = 0;
 
             int searchRadius = (int) (baseRadius * 1.2);
 
@@ -49,7 +53,8 @@ public class IslandDecayHandler {
                 int globalZ = center.getZ() + dz;
 
                 double distSq = (double) dx * dx + (double) dz * dz;
-                double minR = stableRatio * baseRadius;
+
+                double minR = Math.pow(stableRatio, 1.5) * baseRadius;
 
                 if (distSq < minR * minR) continue;
 
