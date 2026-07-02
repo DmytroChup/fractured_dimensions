@@ -116,25 +116,63 @@ public final class MultiblockValidator {
     }
 
     public static ValidationResult checkStructure(Level level, BlockPos controllerPos) {
-        for (StructureOffset offset : ANCHOR_OFFSETS) {
-            BlockPos checkPos = controllerPos.offset(offset.dx(), offset.dy(), offset.dz());
-            Block expectedBlock = offset.expectedBlock().get();
+        ValidationResult lastError = null;
 
-            if (!level.getBlockState(checkPos).is(expectedBlock)) {
-                return ValidationResult.fail(checkPos, offset.label());
+        for (int rotation = 0; rotation < 4; rotation++) {
+            boolean currentValid = true;
+            for (StructureOffset offset : ANCHOR_OFFSETS) {
+                int rDx = offset.dx();
+                int rDz = offset.dz();
+
+                if (rotation == 1) {
+                    rDx = -offset.dz();
+                    rDz = offset.dx();
+                } else if (rotation == 2) {
+                    rDx = -offset.dx();
+                    rDz = -offset.dz();
+                } else if (rotation == 3) {
+                    rDx = offset.dz();
+                    rDz = -offset.dx();
+                }
+
+                BlockPos checkPos = controllerPos.offset(rDx, offset.dy(), rDz);
+                Block expectedBlock = offset.expectedBlock().get();
+
+                if (!level.getBlockState(checkPos).is(expectedBlock)) {
+                    lastError = ValidationResult.fail(checkPos, offset.label());
+                    currentValid = false;
+                    break;
+                }
+            }
+            if (currentValid) {
+                return ValidationResult.success();
             }
         }
-        return ValidationResult.success();
+        return lastError;
     }
 
     public static @Nullable BlockPos findControllerFrom(Level level, BlockPos clickedPos) {
-        for (StructureOffset offset : ANCHOR_OFFSETS) {
-            // Reverse the offset: if the controller is at C and this block is at C+offset,
-            // then the controller is at clickedPos - offset
-            BlockPos candidatePos = clickedPos.offset(-offset.dx(), -offset.dy(), -offset.dz());
+        for (int rotation = 0; rotation < 4; rotation++) {
+            for (StructureOffset offset : ANCHOR_OFFSETS) {
+                int rDx = offset.dx();
+                int rDz = offset.dz();
 
-            if (level.getBlockState(candidatePos).is(ModBlocks.ANCHOR_CONTROLLER.get())) {
-                return candidatePos;
+                if (rotation == 1) {
+                    rDx = -offset.dz();
+                    rDz = offset.dx();
+                } else if (rotation == 2) {
+                    rDx = -offset.dx();
+                    rDz = -offset.dz();
+                } else if (rotation == 3) {
+                    rDx = offset.dz();
+                    rDz = -offset.dx();
+                }
+
+                BlockPos candidatePos = clickedPos.offset(-rDx, -offset.dy(), -rDz);
+
+                if (level.getBlockState(candidatePos).is(ModBlocks.ANCHOR_CONTROLLER.get())) {
+                    return candidatePos;
+                }
             }
         }
         return null;
