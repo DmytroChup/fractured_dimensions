@@ -11,6 +11,7 @@ public class IslandGeneratorRegistry {
     static {
         register(0, 0, new YellowDwarfGenerator());
         register(1, 0, new PurplePlanetGenerator());
+        register(2, 0, new AsteroidGenerator());
     }
 
     public static void register(int type, int variant, IslandTypeGenerator generator) {
