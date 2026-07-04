@@ -9,6 +9,7 @@
     "fractured_dimensions:anchor_controller",
     "fractured_dimensions:energy_port",
     "fractured_dimensions:dyson_hull",
-    "fractured_dimensions:dyson_core"
+    "fractured_dimensions:dyson_core",
+    "fractured_dimensions:meteoric_generator"
   ]
 }

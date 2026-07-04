@@ -27,7 +27,8 @@ public class FDBlockTagProvider extends BlockTagsProvider {
                         ModBlocks.ANCHOR_CONTROLLER.get(),
                         ModBlocks.ENERGY_PORT.get(),
                         ModBlocks.DYSON_HULL.get(),
-                        ModBlocks.DYSON_CORE.get());
+                        ModBlocks.DYSON_CORE.get(),
+                        ModBlocks.METEORIC_GENERATOR.get());
 
         this.tag(BlockTags.NEEDS_IRON_TOOL)
                 .add(ModBlocks.FALLEN_METEORITE.get(),
@@ -35,7 +36,8 @@ public class FDBlockTagProvider extends BlockTagsProvider {
                         ModBlocks.OBSERVER_PLATFORM.get(),
                         ModBlocks.ENERGY_CORE.get(),
                         ModBlocks.ANCHOR_CONTROLLER.get(),
-                        ModBlocks.ENERGY_PORT.get());
+                        ModBlocks.ENERGY_PORT.get(),
+                        ModBlocks.METEORIC_GENERATOR.get());
 
         this.tag(BlockTags.NEEDS_DIAMOND_TOOL)
                 .add(ModBlocks.AZURITE_ORE.get(),

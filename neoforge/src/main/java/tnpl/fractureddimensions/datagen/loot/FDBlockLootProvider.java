@@ -34,6 +34,7 @@ public class FDBlockLootProvider extends BlockLootSubProvider {
         this.dropSelf(ModBlocks.YELLOW_DWARF_PLASMA.get());
         this.dropSelf(ModBlocks.DYSON_HULL.get());
         this.dropSelf(ModBlocks.DYSON_CORE.get());
+        this.dropSelf(ModBlocks.METEORIC_GENERATOR.get());
 
         this.add(ModBlocks.FALLEN_METEORITE.get(), block -> LootTable.lootTable()
                 .withPool(LootPool.lootPool()
