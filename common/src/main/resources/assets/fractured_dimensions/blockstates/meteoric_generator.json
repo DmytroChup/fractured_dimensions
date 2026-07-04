@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,lit=false": { "model": "fractured_dimensions:block/meteoric_generator" },
+    "facing=east,lit=false":  { "model": "fractured_dimensions:block/meteoric_generator", "y": 90 },
+    "facing=south,lit=false": { "model": "fractured_dimensions:block/meteoric_generator", "y": 180 },
+    "facing=west,lit=false":  { "model": "fractured_dimensions:block/meteoric_generator", "y": 270 },
+    "facing=north,lit=true":  { "model": "fractured_dimensions:block/meteoric_generator_on" },
+    "facing=east,lit=true":   { "model": "fractured_dimensions:block/meteoric_generator_on", "y": 90 },
+    "facing=south,lit=true":  { "model": "fractured_dimensions:block/meteoric_generator_on", "y": 180 },
+    "facing=west,lit=true":   { "model": "fractured_dimensions:block/meteoric_generator_on", "y": 270 }
+  }
+}
