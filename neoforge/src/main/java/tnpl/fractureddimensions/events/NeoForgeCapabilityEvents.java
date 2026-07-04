@@ -7,6 +7,7 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import tnpl.fractureddimensions.Constants;
 import tnpl.fractureddimensions.block.EnergyPortBlock;
 import tnpl.fractureddimensions.energy.NeoForgeCoreEnergyWrapper;
+import tnpl.fractureddimensions.energy.NeoForgeGeneratorEnergyWrapper;
 import tnpl.fractureddimensions.energy.NeoForgePortEnergyWrapper;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
 
@@ -20,6 +21,12 @@ public class NeoForgeCapabilityEvents {
                 Capabilities.Energy.BLOCK,
                 ModBlockEntities.ENERGY_CORE.get(),
                 (blockEntity, side) -> new NeoForgeCoreEnergyWrapper(blockEntity)
+        );
+
+        event.registerBlockEntity(
+                Capabilities.Energy.BLOCK,
+                ModBlockEntities.METEORIC_GENERATOR.get(),
+                (blockEntity, side) -> new NeoForgeGeneratorEnergyWrapper(blockEntity)
         );
 
         event.registerBlockEntity(

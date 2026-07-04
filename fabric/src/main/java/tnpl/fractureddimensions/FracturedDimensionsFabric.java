@@ -15,7 +15,9 @@ import team.reborn.energy.api.EnergyStorage;
 import tnpl.fractureddimensions.block.EnergyPortBlock;
 import tnpl.fractureddimensions.command.ModCommands;
 import tnpl.fractureddimensions.energy.FabricCoreEnergyWrapper;
+import tnpl.fractureddimensions.energy.FabricGeneratorEnergyWrapper;
 import tnpl.fractureddimensions.energy.FabricPortEnergyWrapper;
+import tnpl.fractureddimensions.block.entity.MeteoricGeneratorBlockEntity;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import tnpl.fractureddimensions.entity.DysonDroneEntity;
@@ -61,6 +63,11 @@ public class FracturedDimensionsFabric implements ModInitializer {
         EnergyStorage.SIDED.registerForBlockEntity(
                 (blockEntity, direction) -> new FabricCoreEnergyWrapper(blockEntity),
                 ModBlockEntities.ENERGY_CORE.get()
+        );
+
+        EnergyStorage.SIDED.registerForBlockEntities(
+                (blockEntity, direction) -> new FabricGeneratorEnergyWrapper((MeteoricGeneratorBlockEntity) blockEntity),
+                ModBlockEntities.METEORIC_GENERATOR.get()
         );
 
         EnergyStorage.SIDED.registerForBlockEntity(

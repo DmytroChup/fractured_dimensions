@@ -39,4 +39,9 @@ public interface IEnergyPlatformHelper {
      * @return The amount of energy that was (or would be) successfully extracted.
      */
     long extractEnergy(Level level, BlockPos pos, @Nullable Direction side, long amount, boolean simulate);
+
+    /**
+     * Returns the string representation of the energy unit for this platform.
+     */
+    String getEnergyUnit();
 }

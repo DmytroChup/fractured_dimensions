@@ -6,6 +6,7 @@ import tnpl.fractureddimensions.Constants;
 import tnpl.fractureddimensions.block.entity.AnchorControllerBlockEntity;
 import tnpl.fractureddimensions.block.entity.EnergyCoreBlockEntity;
 import tnpl.fractureddimensions.block.entity.EnergyPortBlockEntity;
+import tnpl.fractureddimensions.block.entity.MeteoricGeneratorBlockEntity;
 import tnpl.fractureddimensions.platform.Services;
 import tnpl.fractureddimensions.registration.RegistrationProvider;
 import tnpl.fractureddimensions.registration.RegistryObject;
@@ -25,6 +26,10 @@ public class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<?>, BlockEntityType<AnchorControllerBlockEntity>> ANCHOR_CONTROLLER =
             BLOCK_ENTITIES.register("anchor_controller",
                     () -> Services.PLATFORM.createBlockEntityType(AnchorControllerBlockEntity::new, ModBlocks.ANCHOR_CONTROLLER.get()));
+
+    public static final RegistryObject<BlockEntityType<?>, BlockEntityType<MeteoricGeneratorBlockEntity>> METEORIC_GENERATOR =
+            BLOCK_ENTITIES.register("meteoric_generator",
+                    () -> Services.PLATFORM.createBlockEntityType(MeteoricGeneratorBlockEntity::new, ModBlocks.METEORIC_GENERATOR.get()));
 
     public static void init() {
     }

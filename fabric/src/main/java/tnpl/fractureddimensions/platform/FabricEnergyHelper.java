@@ -63,4 +63,9 @@ public class FabricEnergyHelper implements IEnergyPlatformHelper {
             return extracted;
         }
     }
+
+    @Override
+    public String getEnergyUnit() {
+        return "E";
+    }
 }

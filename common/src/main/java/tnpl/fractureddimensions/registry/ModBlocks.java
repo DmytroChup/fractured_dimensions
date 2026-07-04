@@ -14,6 +14,7 @@ import tnpl.fractureddimensions.Constants;
 import tnpl.fractureddimensions.block.AnchorControllerBlock;
 import tnpl.fractureddimensions.block.EnergyCoreBlock;
 import tnpl.fractureddimensions.block.EnergyPortBlock;
+import tnpl.fractureddimensions.block.MeteoricGeneratorBlock;
 import tnpl.fractureddimensions.block.ReturnPortalBlock;
 import tnpl.fractureddimensions.registration.RegistrationProvider;
 import tnpl.fractureddimensions.registration.RegistryObject;
@@ -75,6 +76,14 @@ public class ModBlocks {
                     .strength(3.0F, 6.0F)
                     .requiresCorrectToolForDrops()
                     .noOcclusion()));
+
+    public static final RegistryObject<Block, MeteoricGeneratorBlock> METEORIC_GENERATOR = registerBlock("meteoric_generator",
+            () -> new MeteoricGeneratorBlock(blockBuilder("meteoric_generator")
+                    .mapColor(MapColor.METAL)
+                    .sound(SoundType.METAL)
+                    .strength(3.5F, 6.0F)
+                    .requiresCorrectToolForDrops()
+                    .lightLevel(state -> state.getValue(MeteoricGeneratorBlock.LIT) ? 13 : 0)));
 
     public static final RegistryObject<Block, ReturnPortalBlock> RETURN_PORTAL = registerBlockWithoutItem("return_portal",
             () -> new ReturnPortalBlock(blockBuilder("return_portal")

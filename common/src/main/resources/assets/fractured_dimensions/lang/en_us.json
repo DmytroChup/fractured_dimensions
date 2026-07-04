@@ -25,11 +25,13 @@
   "block.fractured_dimensions.yellow_dwarf_plasma": "Yellow Dwarf Plasma",
   "block.fractured_dimensions.dyson_hull": "Dyson Sphere Hull",
   "block.fractured_dimensions.dyson_core": "Dyson Sphere Core",
+  "block.fractured_dimensions.meteoric_generator": "Meteoric Generator",
 
   "item.fractured_dimensions.shard_receptacle": "Shard Receptacle",
   "tooltip.fractured_dimensions.shard_receptacle.empty": "Empty",
 
   "container.fractured_dimensions.anchor_controller": "Anchor Controller Interface",
+  "container.fractured_dimensions.meteoric_generator": "Meteoric Generator",
 
   "gui.fractured_dimensions.distance": "Distance: %s ly",
   "gui.fractured_dimensions.survival": "Survival: %s min",

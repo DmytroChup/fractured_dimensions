@@ -68,4 +68,9 @@ public class NeoForgeEnergyHelper implements IEnergyPlatformHelper {
             return extracted;
         }
     }
+
+    @Override
+    public String getEnergyUnit() {
+        return "FE";
+    }
 }

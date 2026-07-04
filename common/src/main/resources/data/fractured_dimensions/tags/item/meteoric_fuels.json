@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:coals",
+    "minecraft:coal_block",
+    "fractured_dimensions:meteorite_shard",
+    "fractured_dimensions:raw_stardust",
+    "fractured_dimensions:yellow_dwarf_plasma"
+  ]
+}

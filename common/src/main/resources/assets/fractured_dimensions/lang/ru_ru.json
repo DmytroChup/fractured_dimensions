@@ -25,11 +25,13 @@
   "block.fractured_dimensions.yellow_dwarf_plasma": "Плазма желтого карлика",
   "block.fractured_dimensions.dyson_hull": "Обшивка Сферы Дайсона",
   "block.fractured_dimensions.dyson_core": "Ядро Сферы Дайсона",
+  "block.fractured_dimensions.meteoric_generator": "Метеоритный генератор",
 
   "item.fractured_dimensions.shard_receptacle": "Хранилище осколков",
   "tooltip.fractured_dimensions.shard_receptacle.empty": "Пусто",
 
   "container.fractured_dimensions.anchor_controller": "Интерфейс контроллера якоря",
+  "container.fractured_dimensions.meteoric_generator": "Метеоритный генератор",
 
   "gui.fractured_dimensions.distance": "Расстояние: %s св.л.",
   "gui.fractured_dimensions.survival": "Выживание: %s мин",
