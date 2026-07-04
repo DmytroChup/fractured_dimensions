@@ -7,6 +7,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import tnpl.fractureddimensions.Constants;
 import tnpl.fractureddimensions.datagen.loot.FDBlockLootProvider;
+import tnpl.fractureddimensions.datagen.recipe.FDRecipeProvider;
 import tnpl.fractureddimensions.datagen.tag.FDBlockTagProvider;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class FDDataGenerator {
     @SubscribeEvent
     public static void gatherData(GatherDataEvent.Server event) {
         event.createProvider(FDBlockTagProvider::new);
+        event.createProvider(FDRecipeProvider.Runner::new);
 
         event.createProvider((output, lookupProvider) ->
                 new LootTableProvider(
