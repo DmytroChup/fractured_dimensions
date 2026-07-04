@@ -231,18 +231,13 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
     public void checkEnergyLevels() {
         if (this.level == null) return;
 
-        BlockPos[] corePositions = new BlockPos[]{
-            this.worldPosition.offset(2, 1, -1),
-            this.worldPosition.offset(-2, 1, -1),
-            this.worldPosition.offset(2, 1, 1),
-            this.worldPosition.offset(-2, 1, 1),
-            this.worldPosition.offset(0, 1, -2)
-        };
-
         long totalEnergy = 0;
-        for (BlockPos corePos : corePositions) {
-            if (this.level.getBlockEntity(corePos) instanceof EnergyCoreBlockEntity core) {
-                totalEnergy += core.getEnergy();
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dz = -2; dz <= 2; dz++) {
+                BlockPos corePos = this.worldPosition.offset(dx, 1, dz);
+                if (this.level.getBlockEntity(corePos) instanceof EnergyCoreBlockEntity core) {
+                    totalEnergy += core.getEnergy();
+                }
             }
         }
 
@@ -260,20 +255,15 @@ public class AnchorControllerBlockEntity extends BlockEntity implements GeoBlock
     private int computeEnergyPermille() {
         if (this.level == null) return 0;
 
-        BlockPos[] corePositions = {
-            this.worldPosition.offset(2, 1, -1),
-            this.worldPosition.offset(-2, 1, -1),
-            this.worldPosition.offset(2, 1, 1),
-            this.worldPosition.offset(-2, 1, 1),
-            this.worldPosition.offset(0, 1, -2)
-        };
-
         long totalEnergy = 0;
-        long totalMax   = 0;
-        for (BlockPos corePos : corePositions) {
-            if (this.level.getBlockEntity(corePos) instanceof EnergyCoreBlockEntity core) {
-                totalEnergy += core.getEnergy();
-                totalMax    += core.getMaxEnergy();
+        long totalMax = 0;
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dz = -2; dz <= 2; dz++) {
+                BlockPos corePos = this.worldPosition.offset(dx, 1, dz);
+                if (this.level.getBlockEntity(corePos) instanceof EnergyCoreBlockEntity core) {
+                    totalEnergy += core.getEnergy();
+                    totalMax += core.getMaxEnergy();
+                }
             }
         }
         if (totalMax <= 0) return 0;

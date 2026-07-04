@@ -5,6 +5,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EnergyPortBlockEntity extends BlockEntity {
@@ -14,23 +15,18 @@ public class EnergyPortBlockEntity extends BlockEntity {
     }
 
     public List<EnergyCoreBlockEntity> getCores() {
-        if (this.level == null) return java.util.List.of();
+        if (this.level == null) return List.of();
 
         BlockPos controllerPos = MultiblockValidator.findControllerFrom(this.level, this.worldPosition);
-        if (controllerPos == null) return java.util.List.of();
+        if (controllerPos == null) return List.of();
 
-        BlockPos[] corePositions = new BlockPos[]{
-            controllerPos.offset(2, 1, -1),
-            controllerPos.offset(-2, 1, -1),
-            controllerPos.offset(2, 1, 1),
-            controllerPos.offset(-2, 1, 1),
-            controllerPos.offset(0, 1, -2)
-        };
-
-        java.util.List<EnergyCoreBlockEntity> cores = new java.util.ArrayList<>();
-        for (BlockPos pos : corePositions) {
-            if (this.level.getBlockEntity(pos) instanceof EnergyCoreBlockEntity core) {
-                cores.add(core);
+        List<EnergyCoreBlockEntity> cores = new ArrayList<>();
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dz = -2; dz <= 2; dz++) {
+                BlockPos pos = controllerPos.offset(dx, 1, dz);
+                if (this.level.getBlockEntity(pos) instanceof EnergyCoreBlockEntity core) {
+                    cores.add(core);
+                }
             }
         }
         return cores;
