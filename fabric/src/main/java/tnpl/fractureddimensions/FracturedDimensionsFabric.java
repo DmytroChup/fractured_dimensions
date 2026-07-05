@@ -13,11 +13,11 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import team.reborn.energy.api.EnergyStorage;
 import tnpl.fractureddimensions.block.EnergyPortBlock;
+import tnpl.fractureddimensions.block.MeteoricGeneratorBlock;
 import tnpl.fractureddimensions.command.ModCommands;
 import tnpl.fractureddimensions.energy.FabricCoreEnergyWrapper;
 import tnpl.fractureddimensions.energy.FabricGeneratorEnergyWrapper;
 import tnpl.fractureddimensions.energy.FabricPortEnergyWrapper;
-import tnpl.fractureddimensions.block.entity.MeteoricGeneratorBlockEntity;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import tnpl.fractureddimensions.entity.DysonDroneEntity;
@@ -65,8 +65,13 @@ public class FracturedDimensionsFabric implements ModInitializer {
                 ModBlockEntities.ENERGY_CORE.get()
         );
 
-        EnergyStorage.SIDED.registerForBlockEntities(
-                (blockEntity, direction) -> new FabricGeneratorEnergyWrapper((MeteoricGeneratorBlockEntity) blockEntity),
+        EnergyStorage.SIDED.registerForBlockEntity(
+                (blockEntity, direction) -> {
+                    if (direction == blockEntity.getBlockState().getValue(MeteoricGeneratorBlock.FACING)) {
+                        return null;
+                    }
+                    return new FabricGeneratorEnergyWrapper(blockEntity);
+                },
                 ModBlockEntities.METEORIC_GENERATOR.get()
         );
 

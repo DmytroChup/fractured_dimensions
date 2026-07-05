@@ -119,7 +119,10 @@ public class MeteoricGeneratorBlockEntity extends BlockEntity implements Worldly
 
         if (entity.energy > 0) {
             long remaining = entity.energy;
+            Direction facing = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
             for (Direction dir : Direction.values()) {
+                if (dir == facing) continue;
+                
                 BlockPos neighbor = pos.relative(dir);
                 if (Services.ENERGY.isEnergyContainer(level, neighbor, dir.getOpposite())) {
                     long inserted = Services.ENERGY.insertEnergy(level, neighbor, dir.getOpposite(), remaining, false);

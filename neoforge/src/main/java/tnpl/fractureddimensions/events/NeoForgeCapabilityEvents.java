@@ -1,11 +1,13 @@
 package tnpl.fractureddimensions.events;
 
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import tnpl.fractureddimensions.Constants;
 import tnpl.fractureddimensions.block.EnergyPortBlock;
+import tnpl.fractureddimensions.block.MeteoricGeneratorBlock;
 import tnpl.fractureddimensions.energy.NeoForgeCoreEnergyWrapper;
 import tnpl.fractureddimensions.energy.NeoForgeGeneratorEnergyWrapper;
 import tnpl.fractureddimensions.energy.NeoForgePortEnergyWrapper;
@@ -26,7 +28,12 @@ public class NeoForgeCapabilityEvents {
         event.registerBlockEntity(
                 Capabilities.Energy.BLOCK,
                 ModBlockEntities.METEORIC_GENERATOR.get(),
-                (blockEntity, side) -> new NeoForgeGeneratorEnergyWrapper(blockEntity)
+                (blockEntity, side) -> {
+                    if (side == blockEntity.getBlockState().getValue(MeteoricGeneratorBlock.FACING)) {
+                        return null;
+                    }
+                    return new NeoForgeGeneratorEnergyWrapper(blockEntity);
+                }
         );
 
         event.registerBlockEntity(
