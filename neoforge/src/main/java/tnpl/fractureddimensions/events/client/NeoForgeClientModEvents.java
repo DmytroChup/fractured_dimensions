@@ -4,6 +4,7 @@ import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import tnpl.fractureddimensions.client.gui.AnchorControllerScreen;
 import tnpl.fractureddimensions.client.gui.MeteoricGeneratorScreen;
+import tnpl.fractureddimensions.client.gui.PressScreen;
 import tnpl.fractureddimensions.client.render.block.AnchorControllerRenderer;
 import tnpl.fractureddimensions.client.render.block.PressRenderer;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
@@ -25,5 +26,6 @@ public class NeoForgeClientModEvents {
     public static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenus.ANCHOR_CONTROLLER_MENU.get(), AnchorControllerScreen::new);
         event.register(ModMenus.METEORIC_GENERATOR_MENU.get(), MeteoricGeneratorScreen::new);
+        event.register(ModMenus.PRESS_MENU.get(), PressScreen::new);
     }
 }

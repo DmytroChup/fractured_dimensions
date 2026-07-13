@@ -22,6 +22,10 @@ public class ModMenus {
             MENUS.register("meteoric_generator", () ->
                     Services.PLATFORM.createMenuType(MeteoricGeneratorMenu::new));
 
+    public static final RegistryObject<MenuType<?>, MenuType<tnpl.fractureddimensions.block.entity.menu.PressMenu>> PRESS_MENU =
+            MENUS.register("press", () ->
+                    Services.PLATFORM.createMenuType(tnpl.fractureddimensions.block.entity.menu.PressMenu::new));
+
     public static void init() {
     }
 }

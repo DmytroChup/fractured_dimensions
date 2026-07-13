@@ -26,6 +26,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jspecify.annotations.Nullable;
+import tnpl.fractureddimensions.block.entity.MeteoricGeneratorBlockEntity;
 import tnpl.fractureddimensions.block.entity.PressBlockEntity;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
 import tnpl.fractureddimensions.registry.ModBlocks;
@@ -112,12 +113,9 @@ public class PressBlock extends Block implements EntityBlock {
             BlockHitResult hitResult
     ) {
         if (!level.isClientSide()) {
-            if (level.getBlockEntity(pos) instanceof PressBlockEntity be) {
-                // TODO: Open GUI menu here when it's implemented
-                
-                // Temporary debug test
-                be.startProcessing(60); 
-                return InteractionResult.CONSUME;
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof PressBlockEntity press) {
+                player.openMenu(press);
             }
         }
         return InteractionResult.SUCCESS;

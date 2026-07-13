@@ -48,6 +48,10 @@ public class PressBlockEntity extends BlockEntity implements GeoBlockEntity, Men
         }
     };
 
+    public SimpleContainer getInventory() {
+        return this.inventory;
+    }
+
     private long energy = 0L;
     private final long maxEnergy = 100_000L;
     private int progress = 0;
@@ -195,6 +199,7 @@ public class PressBlockEntity extends BlockEntity implements GeoBlockEntity, Men
 
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player) {
-        return null;
+        return new tnpl.fractureddimensions.block.entity.menu.PressMenu(id, playerInventory, this.inventory, net.minecraft.world.inventory.ContainerLevelAccess.create(this.level, this.worldPosition), this.dataAccess);
     }
+
 }
