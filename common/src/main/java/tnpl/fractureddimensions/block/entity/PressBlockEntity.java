@@ -28,7 +28,9 @@ import tnpl.fractureddimensions.registry.ModBlockEntities;
 
 import java.util.List;
 
-public class PressBlockEntity extends BlockEntity implements GeoBlockEntity, MenuProvider {
+import tnpl.fractureddimensions.energy.IEnergyContainer;
+
+public class PressBlockEntity extends BlockEntity implements GeoBlockEntity, MenuProvider, IEnergyContainer {
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -109,6 +111,26 @@ public class PressBlockEntity extends BlockEntity implements GeoBlockEntity, Men
         this.energy -= removed;
         setChanged();
         return removed;
+    }
+
+    @Override
+    public long getMaxInsert() {
+        return 1000L;
+    }
+
+    @Override
+    public long getMaxExtract() {
+        return 0L;
+    }
+
+    @Override
+    public boolean canInsert() {
+        return true;
+    }
+
+    @Override
+    public boolean canExtract() {
+        return false;
     }
 
     @Override

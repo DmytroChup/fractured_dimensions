@@ -9,7 +9,9 @@ import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Unique;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
 
-public class EnergyCoreBlockEntity extends BlockEntity {
+import tnpl.fractureddimensions.energy.IEnergyContainer;
+
+public class EnergyCoreBlockEntity extends BlockEntity implements IEnergyContainer {
 
     @Unique
     private static final String NBT_ENERGY = "Energy";
@@ -94,5 +96,25 @@ public class EnergyCoreBlockEntity extends BlockEntity {
 
         this.maxEnergy = input.getLongOr(NBT_MAX_ENERGY, DEFAULT_MAX_ENERGY);
         this.energy = Math.clamp(input.getLongOr(NBT_ENERGY, 0L), 0L, this.maxEnergy);
+    }
+
+    @Override
+    public long getMaxInsert() {
+        return 100_000L; // Example max insert for core
+    }
+
+    @Override
+    public long getMaxExtract() {
+        return 100_000L; // Example max extract for core
+    }
+
+    @Override
+    public boolean canInsert() {
+        return true;
+    }
+
+    @Override
+    public boolean canExtract() {
+        return true;
     }
 }

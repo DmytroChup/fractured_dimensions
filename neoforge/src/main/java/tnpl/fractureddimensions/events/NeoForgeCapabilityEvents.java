@@ -1,6 +1,7 @@
 package tnpl.fractureddimensions.events;
 
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.capabilities.Capabilities;
@@ -8,10 +9,12 @@ import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import tnpl.fractureddimensions.Constants;
 import tnpl.fractureddimensions.block.EnergyPortBlock;
 import tnpl.fractureddimensions.block.MeteoricGeneratorBlock;
-import tnpl.fractureddimensions.energy.NeoForgeCoreEnergyWrapper;
-import tnpl.fractureddimensions.energy.NeoForgeGeneratorEnergyWrapper;
+import tnpl.fractureddimensions.block.PressPartBlock;
+import tnpl.fractureddimensions.block.entity.PressBlockEntity;
+import tnpl.fractureddimensions.energy.NeoForgeGenericEnergyWrapper;
 import tnpl.fractureddimensions.energy.NeoForgePortEnergyWrapper;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
+import tnpl.fractureddimensions.registry.ModBlocks;
 
 @EventBusSubscriber(modid = Constants.MOD_ID)
 public class NeoForgeCapabilityEvents {
@@ -22,7 +25,7 @@ public class NeoForgeCapabilityEvents {
         event.registerBlockEntity(
                 Capabilities.Energy.BLOCK,
                 ModBlockEntities.ENERGY_CORE.get(),
-                (blockEntity, side) -> new NeoForgeCoreEnergyWrapper(blockEntity)
+                (blockEntity, side) -> new NeoForgeGenericEnergyWrapper(blockEntity)
         );
 
         event.registerBlockEntity(
@@ -32,7 +35,7 @@ public class NeoForgeCapabilityEvents {
                     if (side == blockEntity.getBlockState().getValue(MeteoricGeneratorBlock.FACING)) {
                         return null;
                     }
-                    return new NeoForgeGeneratorEnergyWrapper(blockEntity);
+                    return new NeoForgeGenericEnergyWrapper(blockEntity);
                 }
         );
 
@@ -45,6 +48,20 @@ public class NeoForgeCapabilityEvents {
                     }
                     return null;
                 }
+        );
+
+        event.registerBlock(
+                Capabilities.Energy.BLOCK,
+                (level, pos, state, be, side) -> {
+                    if (state.getValue(PressPartBlock.PART) == 2 && side == Direction.UP) {
+                        BlockEntity mainBe = level.getBlockEntity(pos.below(2));
+                        if (mainBe instanceof PressBlockEntity press) {
+                            return new NeoForgeGenericEnergyWrapper(press);
+                        }
+                    }
+                    return null;
+                },
+                ModBlocks.PRESS_PART.get()
         );
     }
 }

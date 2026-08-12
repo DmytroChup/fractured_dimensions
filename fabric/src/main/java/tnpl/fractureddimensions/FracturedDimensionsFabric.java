@@ -4,24 +4,28 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.Heightmap;
 import team.reborn.energy.api.EnergyStorage;
 import tnpl.fractureddimensions.block.EnergyPortBlock;
 import tnpl.fractureddimensions.block.MeteoricGeneratorBlock;
+import tnpl.fractureddimensions.block.PressPartBlock;
+import tnpl.fractureddimensions.block.entity.PressBlockEntity;
 import tnpl.fractureddimensions.command.ModCommands;
-import tnpl.fractureddimensions.energy.FabricCoreEnergyWrapper;
-import tnpl.fractureddimensions.energy.FabricGeneratorEnergyWrapper;
+import tnpl.fractureddimensions.energy.FabricGenericEnergyWrapper;
 import tnpl.fractureddimensions.energy.FabricPortEnergyWrapper;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import tnpl.fractureddimensions.entity.DysonDroneEntity;
 import tnpl.fractureddimensions.entity.PhotospheriqueEntity;
+import tnpl.fractureddimensions.registry.ModBlocks;
 import tnpl.fractureddimensions.registry.ModEntityTypes;
 
 public class FracturedDimensionsFabric implements ModInitializer {
@@ -61,7 +65,7 @@ public class FracturedDimensionsFabric implements ModInitializer {
         );
 
         EnergyStorage.SIDED.registerForBlockEntity(
-                (blockEntity, direction) -> new FabricCoreEnergyWrapper(blockEntity),
+                (blockEntity, direction) -> new FabricGenericEnergyWrapper(blockEntity),
                 ModBlockEntities.ENERGY_CORE.get()
         );
 
@@ -70,7 +74,7 @@ public class FracturedDimensionsFabric implements ModInitializer {
                     if (direction == blockEntity.getBlockState().getValue(MeteoricGeneratorBlock.FACING)) {
                         return null;
                     }
-                    return new FabricGeneratorEnergyWrapper(blockEntity);
+                    return new FabricGenericEnergyWrapper(blockEntity);
                 },
                 ModBlockEntities.METEORIC_GENERATOR.get()
         );
@@ -83,6 +87,19 @@ public class FracturedDimensionsFabric implements ModInitializer {
                     return null;
                 },
                 ModBlockEntities.ENERGY_PORT.get()
+        );
+
+        EnergyStorage.SIDED.registerForBlocks(
+                (level, pos, state, blockEntity, direction) -> {
+                    if (state.getValue(PressPartBlock.PART) == 2 && direction == Direction.UP) {
+                        BlockEntity mainBe = level.getBlockEntity(pos.below(2));
+                        if (mainBe instanceof PressBlockEntity press) {
+                            return new FabricGenericEnergyWrapper(press);
+                        }
+                    }
+                    return null;
+                },
+                ModBlocks.PRESS_PART.get()
         );
     }
 }

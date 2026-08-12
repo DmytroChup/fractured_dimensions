@@ -25,25 +25,4 @@ public class EnergyCoreBlock extends Block implements EntityBlock {
     public @Nullable BlockEntity newBlockEntity(@NonNull BlockPos blockPos, @NonNull BlockState blockState) {
         return new EnergyCoreBlockEntity(blockPos, blockState);
     }
-
-    // TODO: Only for debug, delete later
-    @Override
-    protected InteractionResult useWithoutItem(BlockState state,
-                                               Level level,
-                                               BlockPos pos,
-                                               Player player,
-                                               BlockHitResult hitResult) {
-        if (!level.isClientSide()) {
-
-            long inserted = Services.ENERGY.insertEnergy(level, pos, hitResult.getDirection(), 5_000_000L, false);
-
-            if (inserted > 0) {
-                player.sendSystemMessage(Component.literal("§a" + inserted + " energy has been successfully injected!"));
-            } else {
-                player.sendSystemMessage(Component.literal("§cThe core is charged to max!"));
-            }
-        }
-
-        return InteractionResult.SUCCESS;
-    }
 }
