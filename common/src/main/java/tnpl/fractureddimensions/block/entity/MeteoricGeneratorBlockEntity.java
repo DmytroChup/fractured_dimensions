@@ -8,7 +8,9 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,16 +25,19 @@ import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
 import tnpl.fractureddimensions.platform.Services;
 import tnpl.fractureddimensions.registry.ModBlockEntities;
+import tnpl.fractureddimensions.registry.ModBlocks;
 import tnpl.fractureddimensions.registry.ModItems;
 import tnpl.fractureddimensions.block.entity.menu.MeteoricGeneratorMenu;
-import tnpl.fractureddimensions.registry.ModTags;
 import tnpl.fractureddimensions.util.LongDataHelper;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.LongConsumer;
 import java.util.function.LongSupplier;
 
-public class MeteoricGeneratorBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider {
+import tnpl.fractureddimensions.energy.IEnergyContainer;
+
+public class MeteoricGeneratorBlockEntity extends BlockEntity implements WorldlyContainer, MenuProvider, IEnergyContainer {
 
     private static final String NBT_ENERGY = "Energy";
     private static final String NBT_BURN_TIME = "BurnTime";
@@ -59,6 +64,15 @@ public class MeteoricGeneratorBlockEntity extends BlockEntity implements Worldly
                     (val) -> this.burnTime = (int) val,
                     (val) -> this.maxBurnTime = (int) val
             }
+    );
+
+    public static final Map<Item, Integer> CUSTOM_FUELS = Map.of(
+            Items.COAL, 800,
+            Items.CHARCOAL, 800,
+            Items.COAL_BLOCK, 8000,
+            ModItems.METEORITE_SHARD.get(), 2000,
+            ModItems.RAW_STARDUST.get(), 5000,
+            ModBlocks.YELLOW_DWARF_PLASMA.get().asItem(), 10000
     );
 
     public MeteoricGeneratorBlockEntity(BlockPos pos, BlockState state) {
@@ -95,16 +109,8 @@ public class MeteoricGeneratorBlockEntity extends BlockEntity implements Worldly
         if (!entity.isBurning() && entity.energy < entity.maxEnergy) {
             ItemStack fuel = entity.items.getFirst();
             
-            if (fuel.is(ModTags.Items.METEORIC_FUELS)) {
-                int fuelValue = level.fuelValues().burnDuration(fuel);
-
-                if (fuelValue <= 0) {
-                    if (fuel.is(ModItems.METEORITE_SHARD.get())) fuelValue = 4000;
-                    else if (fuel.is(ModItems.RAW_STARDUST.get())) fuelValue = 10000;
-                    else fuelValue = 1600;
-                }
-                fuelValue = Math.max(1, fuelValue / 2);
-
+            if (!fuel.isEmpty() && CUSTOM_FUELS.containsKey(fuel.getItem())) {
+                int fuelValue = CUSTOM_FUELS.get(fuel.getItem());
                 entity.burnTime = fuelValue;
                 entity.maxBurnTime = fuelValue;
                 fuel.shrink(1);
@@ -174,6 +180,26 @@ public class MeteoricGeneratorBlockEntity extends BlockEntity implements Worldly
     }
 
     @Override
+    public long getMaxInsert() {
+        return 0L;
+    }
+
+    @Override
+    public long getMaxExtract() {
+        return 1000L; // Example max extract for generator
+    }
+
+    @Override
+    public boolean canInsert() {
+        return false;
+    }
+
+    @Override
+    public boolean canExtract() {
+        return true;
+    }
+
+    @Override
     protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
         output.putLong(NBT_ENERGY, this.energy);
@@ -202,7 +228,7 @@ public class MeteoricGeneratorBlockEntity extends BlockEntity implements Worldly
 
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
-        return stack.is(ModTags.Items.METEORIC_FUELS);
+        return CUSTOM_FUELS.containsKey(stack.getItem());
     }
 
     @Override

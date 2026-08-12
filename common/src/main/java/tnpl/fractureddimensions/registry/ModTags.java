@@ -8,7 +8,6 @@ import tnpl.fractureddimensions.Constants;
 
 public class ModTags {
     public static class Items {
-        public static final TagKey<Item> METEORIC_FUELS = create("meteoric_fuels");
 
         private static TagKey<Item> create(String name) {
             return TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Constants.MOD_ID, name));

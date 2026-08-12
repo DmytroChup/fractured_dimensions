@@ -52,7 +52,7 @@ public class MeteoricGeneratorMenu extends AbstractContainerMenu {
         this.addSlot(new Slot(container, FUEL_SLOT, 64, 35) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(ModTags.Items.METEORIC_FUELS);
+                return tnpl.fractureddimensions.block.entity.MeteoricGeneratorBlockEntity.CUSTOM_FUELS.containsKey(stack.getItem());
             }
         });
 
